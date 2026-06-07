@@ -25,7 +25,7 @@ const products = [
     { id: 'm10', category: 'men', title: 'Classic Houndstooth Executive Suit', price: 460.00, img: 'https://images.unsplash.com/photo-1505632951788-8b8222138331?q=80&w=600&auto=format&fit=crop' }
 ];
 
-// Extended Color Palette - 20+ Premium Colors
+// Extended Color Palette - 22 Premium Colors
 const colorPalette = [
     { name: 'Midnight Black', hex: '#111111' },
     { name: 'Charcoal Grey', hex: '#36454F' },
@@ -55,6 +55,7 @@ const standardSizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
 
 // Shopping Cart Application State
 let cart = [];
+let selectedProductModal = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
@@ -70,48 +71,15 @@ function renderProducts() {
     menGrid.innerHTML = '';
 
     products.forEach(product => {
-        // Build Swatches HTML - Display colors without image filter
-        let swatchesHTML = '';
-        colorPalette.forEach((color, index) => {
-            const isActive = index === 0 ? 'active' : '';
-            swatchesHTML += `
-                <div class="swatch ${isActive}" 
-                     style="background-color: ${color.hex};" 
-                     data-color="${color.name}"
-                     title="${color.name}"
-                     onclick="selectProductColor(this, '${product.id}')">
-                </div>
-            `;
-        });
-
-        // Build Size Dropdown HTML
-        let sizesHTML = `<select id="size-${product.id}" class="size-selector">`;
-        standardSizes.forEach(size => {
-            sizesHTML += `<option value="${size}">${size}</option>`;
-        });
-        sizesHTML += `</select>`;
-
         const productHTML = `
             <div class="product-card" id="card-${product.id}">
-                <div class="image-container" id="img-container-${product.id}">
+                <div class="image-container">
                     <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${product.title}</h3>
                     <p class="product-price">$${product.price.toFixed(2)}</p>
-                    
-                    <div class="product-variants">
-                        <div>
-                            <div class="variant-label">Color</div>
-                            <div class="color-swatches">${swatchesHTML}</div>
-                        </div>
-                        <div>
-                            <div class="variant-label">Size</div>
-                            ${sizesHTML}
-                        </div>
-                    </div>
-
-                    <button class="btn-add-cart" onclick="processAddToBag('${product.id}')">Add to Bag</button>
+                    <button class="btn-add-cart" onclick="openProductModal('${product.id}')">Select Options</button>
                 </div>
             </div>
         `;
@@ -124,16 +92,127 @@ function renderProducts() {
     });
 }
 
-// --- Color Selection Handler (No Image Filter) ---
-function selectProductColor(swatchElement, productId) {
-    const container = swatchElement.parentElement;
+// --- Product Selection Modal ---
+function openProductModal(productId) {
+    const product = products.find(p => p.id === productId);
     
-    // Remove active status from sibling swatches
+    // Build Swatches HTML
+    let swatchesHTML = '';
+    colorPalette.forEach((color, index) => {
+        const isActive = index === 0 ? 'active' : '';
+        swatchesHTML += `
+            <div class="swatch ${isActive}" 
+                 style="background-color: ${color.hex};" 
+                 data-color="${color.name}"
+                 title="${color.name}"
+                 onclick="selectModalColor(this)">
+            </div>
+        `;
+    });
+
+    // Build Size Dropdown HTML
+    let sizesHTML = `<select id="modal-size" class="size-selector">`;
+    standardSizes.forEach(size => {
+        sizesHTML += `<option value="${size}">${size}</option>`;
+    });
+    sizesHTML += `</select>`;
+
+    const modalHTML = `
+        <div id="product-modal-overlay" class="product-modal-overlay" onclick="closeProductModal()"></div>
+        <div id="product-modal" class="product-modal">
+            <button class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+            
+            <div class="modal-content">
+                <div class="modal-image">
+                    <img src="${product.img}" alt="${product.title}">
+                </div>
+                
+                <div class="modal-details">
+                    <h2>${product.title}</h2>
+                    <p class="modal-price">$${product.price.toFixed(2)}</p>
+                    
+                    <div class="modal-variants">
+                        <div class="variant-section">
+                            <label class="variant-label">SELECT COLOR</label>
+                            <div class="color-swatches">${swatchesHTML}</div>
+                        </div>
+                        
+                        <div class="variant-section">
+                            <label class="variant-label">SELECT SIZE</label>
+                            ${sizesHTML}
+                        </div>
+                    </div>
+                    
+                    <button class="btn-add-to-cart-modal" onclick="addToCartFromModal('${product.id}')">Add to Bag</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Remove existing modal if any
+    const existingModal = document.getElementById('product-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    const existingOverlay = document.getElementById('product-modal-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+
+    // Insert modal
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    selectedProductModal = productId;
+}
+
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    const overlay = document.getElementById('product-modal-overlay');
+    if (modal) modal.remove();
+    if (overlay) overlay.remove();
+    selectedProductModal = null;
+}
+
+function selectModalColor(swatchElement) {
+    const container = swatchElement.parentElement;
     const swatches = container.querySelectorAll('.swatch');
     swatches.forEach(s => s.classList.remove('active'));
-    
-    // Make clicked swatch active
     swatchElement.classList.add('active');
+}
+
+function addToCartFromModal(productId) {
+    const product = products.find(p => p.id === productId);
+    
+    // Get selected color and size from modal
+    const modal = document.getElementById('product-modal');
+    const activeSwatch = modal.querySelector('.swatch.active');
+    const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'Midnight Black';
+    const selectedColorHex = activeSwatch ? activeSwatch.style.backgroundColor : '#111111';
+    const selectedSize = modal.querySelector('#modal-size').value;
+
+    // Create unique variant identifier
+    const variantCartId = `${productId}-${selectedColor}-${selectedSize}`;
+    
+    const existingItem = cart.find(item => item.variantCartId === variantCartId);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ 
+            ...product, 
+            variantCartId: variantCartId,
+            selectedColor: selectedColor,
+            selectedColorHex: selectedColorHex,
+            selectedSize: selectedSize,
+            quantity: 1 
+        });
+    }
+
+    updateCartUI();
+    closeProductModal();
+    
+    // Open cart drawer
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('visible');
 }
 
 // --- Cart Handlers & Processing ---
@@ -156,41 +235,6 @@ function initCartEventHandlers() {
     cartToggle.addEventListener('click', openCart);
     cartClose.addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
-}
-
-function processAddToBag(productId) {
-    const product = products.find(p => p.id === productId);
-    
-    // Gather selected attributes from DOM
-    const card = document.getElementById(`card-${productId}`);
-    const activeSwatch = card.querySelector('.swatch.active');
-    const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'Midnight Black';
-    const selectedColorHex = activeSwatch ? activeSwatch.style.backgroundColor : '#111111';
-    const selectedSize = document.getElementById(`size-${productId}`).value;
-
-    // Create unique variant identifier
-    const variantCartId = `${productId}-${selectedColor}-${selectedSize}`;
-    
-    const existingItem = cart.find(item => item.variantCartId === variantCartId);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ 
-            ...product, 
-            variantCartId: variantCartId,
-            selectedColor: selectedColor,
-            selectedColorHex: selectedColorHex,
-            selectedSize: selectedSize,
-            quantity: 1 
-        });
-    }
-
-    updateCartUI();
-    
-    // Open cart drawer
-    document.getElementById('cart-drawer').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('visible');
 }
 
 function removeFromCart(variantCartId) {
