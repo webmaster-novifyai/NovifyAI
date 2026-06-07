@@ -1,4 +1,4 @@
-// --- Data Source: Luxury Inventory with Color and Size Matrix ---
+// --- Data Source: Luxury Inventory with Extended Color Palette ---
 const products = [
     // Women's Collection (10 Products)
     { id: 'w1', category: 'women', title: 'Velvet Embroidered Luxury Suit', price: 245.00, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop' },
@@ -25,14 +25,33 @@ const products = [
     { id: 'm10', category: 'men', title: 'Classic Houndstooth Executive Suit', price: 460.00, img: 'https://images.unsplash.com/photo-1505632951788-8b8222138331?q=80&w=600&auto=format&fit=crop' }
 ];
 
-// Available options configuration
+// Extended Color Palette - 20+ Premium Colors
 const colorPalette = [
-    { name: 'black', hex: '#111111' },
-    { name: 'gold', hex: '#D4AF37' },
-    { name: 'navy', hex: '#002040' },
-    { name: 'emerald', hex: '#046307' }
+    { name: 'Midnight Black', hex: '#111111' },
+    { name: 'Charcoal Grey', hex: '#36454F' },
+    { name: 'Deep Navy', hex: '#002040' },
+    { name: 'Gold', hex: '#D4AF37' },
+    { name: 'Rose Gold', hex: '#B76E79' },
+    { name: 'Emerald Green', hex: '#046307' },
+    { name: 'Sapphire Blue', hex: '#0F52BA' },
+    { name: 'Burgundy', hex: '#800020' },
+    { name: 'Wine Red', hex: '#722F37' },
+    { name: 'Plum Purple', hex: '#660066' },
+    { name: 'Forest Green', hex: '#228B22' },
+    { name: 'Teal', hex: '#008080' },
+    { name: 'Copper', hex: '#B87333' },
+    { name: 'Silver', hex: '#C0C0C0' },
+    { name: 'Champagne', hex: '#F7E7CE' },
+    { name: 'Ivory', hex: '#FFFFF0' },
+    { name: 'Burgundy Wine', hex: '#8B0000' },
+    { name: 'Slate Blue', hex: '#6A5ACD' },
+    { name: 'Mustard Yellow', hex: '#FFDB58' },
+    { name: 'Deep Brown', hex: '#654321' },
+    { name: 'Petrol Blue', hex: '#004B49' },
+    { name: 'Maroon', hex: '#800000' }
 ];
-const standardSizes = ['Small', 'Medium', 'Large', 'XL'];
+
+const standardSizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
 
 // Shopping Cart Application State
 let cart = [];
@@ -51,7 +70,7 @@ function renderProducts() {
     menGrid.innerHTML = '';
 
     products.forEach(product => {
-        // Build Swatches HTML
+        // Build Swatches HTML - Display colors without image filter
         let swatchesHTML = '';
         colorPalette.forEach((color, index) => {
             const isActive = index === 0 ? 'active' : '';
@@ -59,7 +78,8 @@ function renderProducts() {
                 <div class="swatch ${isActive}" 
                      style="background-color: ${color.hex};" 
                      data-color="${color.name}"
-                     onclick="changeProductColor(this, '${product.id}')">
+                     title="${color.name}"
+                     onclick="selectProductColor(this, '${product.id}')">
                 </div>
             `;
         });
@@ -73,7 +93,7 @@ function renderProducts() {
 
         const productHTML = `
             <div class="product-card" id="card-${product.id}">
-                <div class="image-container color-tint-black" id="img-container-${product.id}">
+                <div class="image-container" id="img-container-${product.id}">
                     <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
                 </div>
                 <div class="product-info">
@@ -104,24 +124,16 @@ function renderProducts() {
     });
 }
 
-// --- Live Color Variant Swap Engine ---
-function changeProductColor(swatchElement, productId) {
+// --- Color Selection Handler (No Image Filter) ---
+function selectProductColor(swatchElement, productId) {
     const container = swatchElement.parentElement;
     
-    // Remove active status from sibling swatches inside this specific product card
+    // Remove active status from sibling swatches
     const swatches = container.querySelectorAll('.swatch');
     swatches.forEach(s => s.classList.remove('active'));
     
     // Make clicked swatch active
     swatchElement.classList.add('active');
-    
-    // Update Image Container filter class
-    const chosenColor = swatchElement.getAttribute('data-color');
-    const imgContainer = document.getElementById(`img-container-${productId}`);
-    
-    // Clear old filter classes and add the new matching variant theme class
-    imgContainer.className = 'image-container'; 
-    imgContainer.classList.add(`color-tint-${chosenColor}`);
 }
 
 // --- Cart Handlers & Processing ---
@@ -152,10 +164,11 @@ function processAddToBag(productId) {
     // Gather selected attributes from DOM
     const card = document.getElementById(`card-${productId}`);
     const activeSwatch = card.querySelector('.swatch.active');
-    const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'black';
+    const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'Midnight Black';
+    const selectedColorHex = activeSwatch ? activeSwatch.style.backgroundColor : '#111111';
     const selectedSize = document.getElementById(`size-${productId}`).value;
 
-    // Create a composite tracking key to allow separate cart item entries if identical items have unique variants
+    // Create unique variant identifier
     const variantCartId = `${productId}-${selectedColor}-${selectedSize}`;
     
     const existingItem = cart.find(item => item.variantCartId === variantCartId);
@@ -167,6 +180,7 @@ function processAddToBag(productId) {
             ...product, 
             variantCartId: variantCartId,
             selectedColor: selectedColor,
+            selectedColorHex: selectedColorHex,
             selectedSize: selectedSize,
             quantity: 1 
         });
@@ -174,7 +188,7 @@ function processAddToBag(productId) {
 
     updateCartUI();
     
-    // Slide cart outward
+    // Open cart drawer
     document.getElementById('cart-drawer').classList.add('open');
     document.getElementById('cart-overlay').classList.add('visible');
 }
@@ -204,12 +218,14 @@ function updateCartUI() {
     cart.forEach(item => {
         cartContainer.innerHTML += `
             <div class="cart-item">
-                <div class="image-container color-tint-${item.selectedColor}" style="width:60px; height:75px; flex-shrink:0; margin-right:15px;">
-                    <img src="${item.img}" alt="${item.title}" style="width:100%; height:100%; object-fit:cover;">
+                <div style="width:60px; height:75px; flex-shrink:0; margin-right:15px; border-radius:4px; border:2px solid ${item.selectedColorHex}; display:flex; align-items:center; justify-content:center;">
+                    <div style="width:50px; height:65px; background-color:${item.selectedColorHex}; border-radius:3px;"></div>
                 </div>
                 <div class="cart-item-details">
                     <h4 class="cart-item-title">${item.title} (x${item.quantity})</h4>
-                    <div class="cart-item-meta">Color: ${item.selectedColor} | Size: ${item.selectedSize}</div>
+                    <div class="cart-item-meta">
+                        <span style="color:${item.selectedColorHex}; font-weight:bold;">■</span> ${item.selectedColor} | Size: ${item.selectedSize}
+                    </div>
                     <p class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</p>
                     <button class="cart-item-remove" onclick="removeFromCart('${item.variantCartId}')">Remove</button>
                 </div>
