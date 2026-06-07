@@ -1,4 +1,4 @@
-// --- Data Source: 10 Men's & 10 Women's Premium Suits with Curated Visuals ---
+// --- Data Source: Luxury Inventory with Color and Size Matrix ---
 const products = [
     // Women's Collection (10 Products)
     { id: 'w1', category: 'women', title: 'Velvet Embroidered Luxury Suit', price: 245.00, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop' },
@@ -25,10 +25,18 @@ const products = [
     { id: 'm10', category: 'men', title: 'Classic Houndstooth Executive Suit', price: 460.00, img: 'https://images.unsplash.com/photo-1505632951788-8b8222138331?q=80&w=600&auto=format&fit=crop' }
 ];
 
-// --- Shopping Cart Application State ---
+// Available options configuration
+const colorPalette = [
+    { name: 'black', hex: '#111111' },
+    { name: 'gold', hex: '#D4AF37' },
+    { name: 'navy', hex: '#002040' },
+    { name: 'emerald', hex: '#046307' }
+];
+const standardSizes = ['Small', 'Medium', 'Large', 'XL'];
+
+// Shopping Cart Application State
 let cart = [];
 
-// --- Lifecycle Event Initializer ---
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     initCartEventHandlers();
@@ -39,18 +47,51 @@ function renderProducts() {
     const womenGrid = document.getElementById('women-grid');
     const menGrid = document.getElementById('men-grid');
 
-    // Reset grids to prevent duplication
     womenGrid.innerHTML = '';
     menGrid.innerHTML = '';
 
     products.forEach(product => {
+        // Build Swatches HTML
+        let swatchesHTML = '';
+        colorPalette.forEach((color, index) => {
+            const isActive = index === 0 ? 'active' : '';
+            swatchesHTML += `
+                <div class="swatch ${isActive}" 
+                     style="background-color: ${color.hex};" 
+                     data-color="${color.name}"
+                     onclick="changeProductColor(this, '${product.id}')">
+                </div>
+            `;
+        });
+
+        // Build Size Dropdown HTML
+        let sizesHTML = `<select id="size-${product.id}" class="size-selector">`;
+        standardSizes.forEach(size => {
+            sizesHTML += `<option value="${size}">${size}</option>`;
+        });
+        sizesHTML += `</select>`;
+
         const productHTML = `
-            <div class="product-card">
-                <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
+            <div class="product-card" id="card-${product.id}">
+                <div class="image-container color-tint-black" id="img-container-${product.id}">
+                    <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
+                </div>
                 <div class="product-info">
                     <h3 class="product-title">${product.title}</h3>
                     <p class="product-price">$${product.price.toFixed(2)}</p>
-                    <button class="btn-add-cart" onclick="addToCart('${product.id}')">Add to Bag</button>
+                    
+                    <div class="product-variants">
+                        <div>
+                            <div class="variant-label">Color</div>
+                            <div class="color-swatches">${swatchesHTML}</div>
+                        </div>
+                        <div>
+                            <div class="variant-label">Size</div>
+                            ${sizesHTML}
+                        </div>
+                    </div>
+
+                    <button class="btn-add-cart" onclick="processAddToBag('${product.id}')">Add to Bag</button>
                 </div>
             </div>
         `;
@@ -63,7 +104,27 @@ function renderProducts() {
     });
 }
 
-// --- Cart Interface Control Actions ---
+// --- Live Color Variant Swap Engine ---
+function changeProductColor(swatchElement, productId) {
+    const container = swatchElement.parentElement;
+    
+    // Remove active status from sibling swatches inside this specific product card
+    const swatches = container.querySelectorAll('.swatch');
+    swatches.forEach(s => s.classList.remove('active'));
+    
+    // Make clicked swatch active
+    swatchElement.classList.add('active');
+    
+    // Update Image Container filter class
+    const chosenColor = swatchElement.getAttribute('data-color');
+    const imgContainer = document.getElementById(`img-container-${productId}`);
+    
+    // Clear old filter classes and add the new matching variant theme class
+    imgContainer.className = 'image-container'; 
+    imgContainer.classList.add(`color-tint-${chosenColor}`);
+}
+
+// --- Cart Handlers & Processing ---
 function initCartEventHandlers() {
     const cartToggle = document.getElementById('cart-toggle-btn');
     const cartClose = document.getElementById('cart-close-btn');
@@ -85,24 +146,41 @@ function initCartEventHandlers() {
     cartOverlay.addEventListener('click', closeCart);
 }
 
-// --- Core Shopping Cart Logic ---
-function addToCart(productId) {
+function processAddToBag(productId) {
     const product = products.find(p => p.id === productId);
-    const existingItem = cart.find(item => item.id === productId);
+    
+    // Gather selected attributes from DOM
+    const card = document.getElementById(`card-${productId}`);
+    const activeSwatch = card.querySelector('.swatch.active');
+    const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'black';
+    const selectedSize = document.getElementById(`size-${productId}`).value;
+
+    // Create a composite tracking key to allow separate cart item entries if identical items have unique variants
+    const variantCartId = `${productId}-${selectedColor}-${selectedSize}`;
+    
+    const existingItem = cart.find(item => item.variantCartId === variantCartId);
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ 
+            ...product, 
+            variantCartId: variantCartId,
+            selectedColor: selectedColor,
+            selectedSize: selectedSize,
+            quantity: 1 
+        });
     }
 
     updateCartUI();
+    
+    // Slide cart outward
     document.getElementById('cart-drawer').classList.add('open');
     document.getElementById('cart-overlay').classList.add('visible');
 }
 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+function removeFromCart(variantCartId) {
+    cart = cart.filter(item => item.variantCartId !== variantCartId);
     updateCartUI();
 }
 
@@ -111,7 +189,6 @@ function updateCartUI() {
     const cartCount = document.getElementById('cart-count');
     const cartSubtotal = document.getElementById('cart-subtotal');
     
-    // Compute totals
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
@@ -127,11 +204,14 @@ function updateCartUI() {
     cart.forEach(item => {
         cartContainer.innerHTML += `
             <div class="cart-item">
-                <img src="${item.img}" alt="${item.title}" class="cart-item-img">
+                <div class="image-container color-tint-${item.selectedColor}" style="width:60px; height:75px; flex-shrink:0; margin-right:15px;">
+                    <img src="${item.img}" alt="${item.title}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
                 <div class="cart-item-details">
                     <h4 class="cart-item-title">${item.title} (x${item.quantity})</h4>
+                    <div class="cart-item-meta">Color: ${item.selectedColor} | Size: ${item.selectedSize}</div>
                     <p class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</p>
-                    <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
+                    <button class="cart-item-remove" onclick="removeFromCart('${item.variantCartId}')">Remove</button>
                 </div>
             </div>
         `;
