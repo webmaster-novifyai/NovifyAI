@@ -332,32 +332,50 @@ window.processAddToBagFromModal = function(productId) {
     executeCoreCartPush(item, chosenSize);
     window.closeProductModal(); // Closes the quick-view window automatically
 };
+// ==========================================================================
+// CENTRAL CART ENGINE
+// ==========================================================================
 function executeCoreCartPush(item, chosenSize) {
-    const existingItem = cart.find(i => i.id === item.id && i.size === chosenSize);
+    // 1. Initialize cart array safely from localStorage or create an empty one
+    if (typeof window.cart === 'undefined') {
+        window.cart = JSON.parse(localStorage.getItem("vogue_cart")) || [];
+    }
+
+    // 2. Look for existing identical item matches
+    const existingItem = window.cart.find(i => i.id === item.id && i.size === chosenSize);
+    
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({
+        window.cart.push({
             id: item.id,
             title: item.title,
-            price: item.price,
+            price: Number(item.price),
             img: item.img,
             size: chosenSize,
             quantity: 1
         });
     }
 
-    // Save configuration persistently
-    localStorage.setItem("vogue_cart", JSON.stringify(cart));
-    refreshCartUI();
+    // 3. Persist and broadcast updates to your UI components
+    localStorage.setItem("vogue_cart", JSON.stringify(window.cart));
     
-    // Smooth alternative: Slide open the elegant cart drawer instantly
+    // 4. Update the cart counter and drawer UI
+    if (typeof refreshCartUI === 'function') {
+        refreshCartUI();
+    } else {
+        // Fallback calculation helper if refreshCartUI is missing
+        const totalItems = window.cart.reduce((sum, i) => sum + i.quantity, 0);
+        const countBadge = document.getElementById("cart-count");
+        if (countBadge) countBadge.textContent = totalItems;
+    }
+    
+    // 5. Open the cart drawer automatically so the user knows it worked!
     const cartDrawer = document.getElementById("cart-drawer");
     if (cartDrawer) {
         cartDrawer.classList.add("active");
     }
 }
-
 // Append Event Listeners internally to DOMContentLoaded section array area
 document.addEventListener("DOMContentLoaded", () => {
     // ... Keep all your existing structural interface code block elements from previous steps here ...
