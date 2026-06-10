@@ -134,6 +134,26 @@
         </div>
     </footer>
 
+   <div id="product-modal" class="product-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn" aria-label="Close overlay">&times;</button>
+            <div class="modal-left" id="modal-product-img-container">
+                </div>
+            <div class="modal-right">
+                <h2 id="modal-product-title" style="color: #fff; margin: 0 0 10px 0; font-size: 24px; font-family: inherit; letter-spacing: 1px;"></h2>
+                <p id="modal-product-price" style="color: var(--gold-primary, #d4af37); font-size: 20px; font-weight: 600; margin: 0 0 25px 0;"></p>
+                
+                <div class="product-options-wrapper" style="align-items: flex-start;">
+                    <label for="modal-size-selector">Select Size Layout:</label>
+                    <select id="modal-size-selector" class="luxury-size-selector">
+                        </select>
+                </div>
+                
+                <button id="modal-add-to-bag-btn" class="btn-add-cart" style="margin-top: 25px; width: 100%;">Add To Shopping Bag</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
