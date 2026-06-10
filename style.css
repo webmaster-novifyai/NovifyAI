@@ -1078,36 +1078,34 @@ body {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    bottom: 0 !important;
-    right: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
     background-color: rgba(0, 0, 0, 0.85) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
     
-    /* Absolute Centering Engine */
-    display: flex !important; 
-    justify-content: center !important;
+    /* Strict Centering System */
+    display: flex !important;
     align-items: center !important;
+    justify-content: center !important;
     
-    z-index: 99999 !important; /* Layers it over absolutely everything else */
+    z-index: 99999 !important;
     
-    /* FORCE HIDDEN STATE BY DEFAULT */
+    /* Hide state rules */
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
-    
     transition: opacity 0.3s ease, visibility 0.3s ease !important;
 }
 
-/* Activated State via JavaScript Class Toggle */
+/* Activated State via JavaScript Trigger Class */
 .product-modal.active {
     opacity: 1 !important;
     pointer-events: auto !important;
     visibility: visible !important;
 }
 
+/* Inner Layout Card Element */
 .modal-content {
     background-color: #0c0c0c !important;
     border: 1px solid var(--gold-primary, #d4af37) !important;
@@ -1115,19 +1113,23 @@ body {
     max-width: 750px !important;
     width: 90% !important;
     position: relative !important;
-    margin: auto !important; /* Guarantees centering pull from all sides */
     
-    /* Layout alignment split */
+    /* Layout split alignment */
     display: flex !important;
+    flex-direction: row !important;
     gap: 35px !important;
     align-items: center !important;
+    justify-content: center !important;
     
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+    /* Reset margins and force central placement math */
+    margin: auto !important; 
+    
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9) !important;
     transform: scale(0.9) !important;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-/* Upscale click-pop reveal transition */
+/* Click Pop Effect Reveal */
 .product-modal.active .modal-content {
     transform: scale(1) !important;
 }
@@ -1142,8 +1144,7 @@ body {
     font-size: 32px !important;
     cursor: pointer !important;
     line-height: 1 !important;
-    transition: color 0.2s ease !important;
-    z-index: 1020 !important;
+    z-index: 100 !important;
 }
 
 .modal-close-btn:hover {
@@ -1173,15 +1174,15 @@ body {
 }
 
 /* ==========================================
-   MOBILE & TABLET MODAL RESPONSIVENESS
+   MOBILE & TABLET BREAKPOINTS
    ========================================== */
 @media (max-width: 768px) {
     .modal-content {
         flex-direction: column !important;
-        padding: 30px 20px !important;
+        padding: 25px 20px !important;
         max-height: 85vh !important;
-        overflow-y: auto !important; /* Lets users scroll if their device height is short */
-        gap: 20px !important;
+        overflow-y: auto !important; /* Adds safe scrolling inside overlay for tiny phones */
+        gap: 15px !important;
     }
     
     .modal-left {
@@ -1189,16 +1190,10 @@ body {
     }
     
     .modal-left img {
-        height: 250px !important;
-        width: 100% !important;
+        height: 220px !important;
     }
     
     .modal-right {
         text-align: center !important;
-        width: 100% !important;
-    }
-
-    .product-options-wrapper {
-        align-items: center !important;
     }
 }
