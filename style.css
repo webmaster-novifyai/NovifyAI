@@ -840,7 +840,7 @@ a {
 /* ==========================================================================
    10. MOBILE & TABLET DEVICE RESPONSIVE BREAKPOINTS
    ========================================================================== */
-@media (max-width: 992px) {
+@media (max-width: 900px) {
     .container {
         width: 95%;
         padding: 0 15px;
@@ -857,7 +857,7 @@ a {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
     .main-header {
         flex-direction: column;
         gap: 15px;
