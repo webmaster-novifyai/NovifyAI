@@ -18,8 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
+    // Global Shopping Bag State Array
+    let shoppingBag = [];
+
     // ==========================================
-    // 2. DYNAMIC INVENTORY INJECTION ENGINE
+    // 2. DYNAMIC INVENTORY & CARD GENERATION
     // ==========================================
     const targetGrid = document.getElementById('collection-products-grid');
     if (targetGrid) {
@@ -36,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 let sizeOptions = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
 
                 card.innerHTML = `
-                    <img src="${product.image}" alt="${product.title}" class="product-image">
+                    <div class="product-image-wrapper" style="position: relative; overflow: hidden;">
+                        <img src="${product.image}" alt="${product.title}" class="product-image">
+                        <button class="btn-quick-view" data-id="${product.id}" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; border: 1px solid var(--gold-primary); padding: 8px 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; opacity: 0; transition: opacity 0.3s ease;">Quick View</button>
+                    </div>
                     <div class="product-info">
                         <h3 class="product-title">${product.title}</h3>
                         <div class="product-price">$${product.price.toFixed(2)}</div>
@@ -46,39 +52,156 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${sizeOptions}
                             </select>
                         </div>
-                        <button class="btn-add-cart">Add To Shopping Bag</button>
+                        <button class="btn-add-cart" data-id="${product.id}">Add To Shopping Bag</button>
                     </div>
                 `;
                 targetGrid.appendChild(card);
             });
         }
 
-        // Cart counter click actions
-        targetGrid.addEventListener('click', (e) => {
-            if (e.target.classList.contains('btn-add-cart')) {
-                const card = e.target.closest('.product-card');
-                const title = card.querySelector('.product-title').textContent;
-                const size = card.querySelector('.luxury-size-selector').value;
-                
-                alert(`Added ${title} (Size ${size}) to your Shopping Bag.`);
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) {
-                    cartCount.textContent = parseInt(cartCount.textContent || '0') + 1;
-                }
-            }
+        // Add hover triggers for Quick View buttons safely via CSS mapping rules
+        targetGrid.querySelectorAll('.product-card').forEach(card => {
+            const qvBtn = card.querySelector('.btn-quick-view');
+            card.addEventListener('mouseenter', () => { if(qvBtn) qvBtn.style.opacity = '1'; });
+            card.addEventListener('mouseleave', () => { if(qvBtn) qvBtn.style.opacity = '0'; });
         });
     }
 
     // ==========================================
-    // 3. GLOBAL NAVIGATION CONTROL ARCHITECTURE
+    // 3. CORE GLOBAL CART LOGIC ENGINE
     // ==========================================
-    const chatToggle = document.getElementById('chat-toggle');
-    const chatWindow = document.getElementById('chat-window');
-    const chatClose = document.getElementById('chat-close');
-    const chatInput = document.getElementById('chat-input');
-    const chatSend = document.getElementById('chat-send');
-    const chatMessages = document.getElementById('chat-messages');
+    function updateCartUI() {
+        const cartCountBadge = document.getElementById('cart-count');
+        const cartContainer = document.getElementById('cart-items-container');
+        const cartSubtotal = document.getElementById('cart-subtotal');
 
+        // Update Header Icon Count Badge
+        if (cartCountBadge) {
+            cartCountBadge.textContent = shoppingBag.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        // Populate Drawer Panel Items Layout
+        if (cartContainer) {
+            if (shoppingBag.length === 0) {
+                cartContainer.innerHTML = '<p class="empty-message">Your cart is currently empty.</p>';
+            } else {
+                cartContainer.innerHTML = shoppingBag.map((item, index) => `
+                    <div class="cart-item" style="display: flex; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #222;">
+                        <img src="${item.image}" style="width: 70px; height: 90px; object-fit: cover;">
+                        <div style="flex-grow: 1;">
+                            <h4 style="font-family: var(--font-luxury); font-size: 14px; margin-bottom: 4px;">${item.title}</h4>
+                            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Size: ${item.size}</p>
+                            <p style="color: var(--gold-primary); font-size: 13px;">${item.quantity} x $${item.price.toFixed(2)}</p>
+                        </div>
+                        <button class="btn-remove-item" data-index="${index}" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:16px;">&times;</button>
+                    </div>
+                `).join('');
+
+                // Hook item removal listeners smoothly
+                cartContainer.querySelectorAll('.btn-remove-item').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = parseInt(e.target.dataset.index);
+                        shoppingBag.splice(idx, 1);
+                        updateCartUI();
+                    });
+                });
+            }
+        }
+
+        // Compute Subtotal pricing figures
+        if (cartSubtotal) {
+            const total = shoppingBag.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartSubtotal.textContent = `$${total.toFixed(2)}`;
+        }
+    }
+
+    function addItemToBag(id, title, price, image, size) {
+        const existingItem = shoppingBag.find(item => item.id === id && item.size === size);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            shoppingBag.push({ id, title, price, image, size, quantity: 1 });
+        }
+        updateCartUI();
+        
+        // Auto pull-open the side drawer so the user sees the addition instantly
+        const drawer = document.getElementById('cart-drawer');
+        if (drawer) drawer.classList.add('active');
+    }
+
+    // Click Captures for Add to Bag Actions across grids
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-add-cart')) {
+            const card = e.target.closest('.product-card') || document.querySelector('.modal-content');
+            const id = e.target.dataset.id;
+            
+            let title, price, image, size;
+            
+            if (e.target.closest('.modal-content')) {
+                title = document.getElementById('modal-product-title').textContent;
+                price = parseFloat(document.getElementById('modal-product-price').textContent.replace('$', ''));
+                image = document.getElementById('modal-product-img-container').querySelector('img').src;
+                size = document.getElementById('modal-modal-size-selector').value;
+                
+                // Hide modal when item is successfully captured
+                const modal = document.getElementById('product-modal');
+                if (modal) modal.classList.remove('active');
+            } else {
+                title = card.querySelector('.product-title').textContent;
+                price = parseFloat(card.querySelector('.product-price').textContent.replace('$', ''));
+                image = card.querySelector('.product-image').src;
+                size = card.querySelector('.luxury-size-selector').value;
+            }
+
+            addItemToBag(id, title, price, image, size);
+        }
+    });
+
+    // ==========================================
+    // 4. QUICK VIEW MODAL OPERATIONS ENGINE
+    // ==========================================
+    const productModal = document.getElementById('product-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-quick-view')) {
+            const prodId = e.target.dataset.id;
+            
+            // Find target item records across either segment matrix arrays
+            let matchedProduct = luxuryInventory.women.find(p => p.id === prodId) || 
+                                 luxuryInventory.men.find(p => p.id === prodId);
+            
+            if (matchedProduct && productModal) {
+                document.getElementById('modal-product-title').textContent = matchedProduct.title;
+                document.getElementById('modal-product-price').textContent = `$${matchedProduct.price.toFixed(2)}`;
+                
+                const imgWrap = document.getElementById('modal-product-img-container');
+                if (imgWrap) imgWrap.innerHTML = `<img src="${matchedProduct.image}" style="width:100%; height:100%; object-fit:cover;">`;
+                
+                const sizeWrap = document.getElementById('modal-size-dropdown-wrapper');
+                if (sizeWrap) {
+                    let options = matchedProduct.sizes.map(s => `<option value="${s}">${s}</option>`).join('');
+                    sizeWrap.innerHTML = `
+                        <label style="font-size:10px; text-transform:uppercase; color:var(--text-muted);">Select Size:</label>
+                        <select id="modal-modal-size-selector" class="luxury-size-selector" style="margin-top:5px;">${options}</select>
+                    `;
+                }
+
+                const addBtn = document.getElementById('modal-add-to-bag-btn');
+                if (addBtn) addBtn.dataset.id = matchedProduct.id;
+
+                productModal.classList.add('active');
+            }
+        }
+    });
+
+    if (modalCloseBtn && productModal) {
+        modalCloseBtn.addEventListener('click', () => productModal.classList.remove('active'));
+    }
+
+    // ==========================================
+    // 5. GLOBAL SLIDE LAYOUT UI TOGGLES
+    // ==========================================
     const cartTrigger = document.getElementById('cart-trigger');
     const cartDrawer = document.getElementById('cart-drawer');
     const cartCloseBtn = document.getElementById('cart-close-btn');
@@ -87,66 +210,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchOverlay = document.getElementById('search-overlay');
     const searchCloseBtn = document.getElementById('search-close-btn');
 
-    const productModal = document.getElementById('product-modal');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatWindow = document.getElementById('chat-window');
+    const chatClose = document.getElementById('chat-close');
 
-    // Chat Toggle Actions
+    if (cartTrigger && cartDrawer) cartTrigger.addEventListener('click', () => cartDrawer.classList.add('active'));
+    if (cartCloseBtn && cartDrawer) cartCloseBtn.addEventListener('click', () => cartDrawer.classList.remove('active'));
+
+    if (searchTrigger && searchOverlay) searchTrigger.addEventListener('click', () => searchOverlay.classList.add('active'));
+    if (searchCloseBtn && searchOverlay) searchCloseBtn.addEventListener('click', () => searchOverlay.classList.remove('active'));
+
     if (chatToggle && chatWindow) {
         chatToggle.addEventListener('click', (e) => { e.stopPropagation(); chatWindow.classList.toggle('hidden'); });
-        if (chatClose) { chatClose.addEventListener('click', (e) => { e.stopPropagation(); chatWindow.classList.add('hidden'); }); }
+        if (chatClose) chatClose.addEventListener('click', (e) => { e.stopPropagation(); chatWindow.classList.add('hidden'); });
         chatWindow.addEventListener('click', (e) => e.stopPropagation());
         document.addEventListener('click', () => chatWindow.classList.add('hidden'));
     }
 
-    // Cart Drawer Toggle
-    if (cartTrigger && cartDrawer) cartTrigger.addEventListener('click', () => cartDrawer.classList.add('active'));
-    if (cartCloseBtn && cartDrawer) cartCloseBtn.addEventListener('click', () => cartDrawer.classList.remove('active'));
-
-    // Search Interface Toggle
-    if (searchTrigger && searchOverlay) searchTrigger.addEventListener('click', () => searchOverlay.classList.add('active'));
-    if (searchCloseBtn && searchOverlay) searchCloseBtn.addEventListener('click', () => searchOverlay.classList.remove('active'));
-
-    // Quick-View Product Modal Close Trigger
-    if (modalCloseBtn && productModal) {
-        modalCloseBtn.addEventListener('click', () => productModal.classList.remove('active'));
-    }
-
     // ==========================================
-    // 4. INTELLIGENT KEYWORD CONCIERGE CHAT ENGINE
+    // 6. LIVE CHAT CONCIERGE ENGINE
     // ==========================================
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatMessages = document.getElementById('chat-messages');
+
     function generateSmartBotReply(input) {
         const text = input.toLowerCase().trim();
-        
         if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
             return "Good day and welcome to Vogue Avenue. Are you exploring our women's evening couture collections or premium men's tailoring lines today?";
         }
-        if (text.includes('size') || text.includes('fit') || text.includes('chart') || text.includes('small') || text.includes('large')) {
-            return "Our couture items follow precision Italian sizing configurations. You can review exact body measurements on our Size Chart page available in the main header navigation navigation links menu.";
+        if (text.includes('size') || text.includes('fit') || text.includes('chart')) {
+            return "Our items follow precision Italian sizing configurations. You can review exact body measurements on our Size Chart page available in the navigation header link menu.";
         }
-        if (text.includes('women') || text.includes('dress') || text.includes('gown') || text.includes('coat')) {
-            return "Our Women's Atelier focuses on complete textile refinement. The Silk Satin Evening Gown ($1,250.00) and Cashmere Double-Breasted Coat ($1,850.00) are currently among our highlighted showcase items.";
+        if (text.includes('women') || text.includes('dress') || text.includes('gown')) {
+            return "Our Women's Atelier highlights absolute textile refinement. The Silk Satin Evening Gown and Cashmere Double-Breasted Coat are currently among our highest-demanded collection pieces.";
         }
-        if (text.includes('men') || text.includes('suit') || text.includes('tuxedo') || text.includes('boot')) {
-            return "The Men's Tailoring line accentuates structured silhouettes. I highly recommend taking a look at our masterwork Slim-Fit Wool Velvet Tuxedo ($2,100.00) for upcoming formal luxury galas.";
+        if (text.includes('men') || text.includes('suit') || text.includes('tuxedo')) {
+            return "The Men's Tailoring line highlights sharp, architectural structures. I highly recommend viewing our Slim-Fit Wool Velvet Tuxedo for any upcoming luxury arrangements.";
         }
-        if (text.includes('shipping') || text.includes('delivery') || text.includes('order') || text.includes('track')) {
-            return "Vogue Avenue offers secure, premium insured, priority worldwide transit courier handling on all fashion requests. Delivery typically takes between 3 to 5 business days.";
-        }
-        if (text.includes('price') || text.includes('cost') || text.includes('expensive')) {
-            return "As an elite luxury brand house, our price tiers reflect premium Italian fabrics, master heritage engineering methods, and entirely exclusive batch numbers.";
-        }
-        
-        // Context fallback response
-        return "Thank you for detailing your style preferences. Your query has been passed over to our VIP Personal Concierge Desk. Please let me know if you would like specifics regarding the textiles or sizes of our current collection lines.";
+        return "Thank you for sharing your fashion criteria. Your query has been logged by our VIP concierge team. Let me know if you would like me to unpack detail aspects of our collection materials.";
     }
 
     function handleUserMessage() {
         if (!chatInput || !chatMessages) return;
-        
         const messageText = chatInput.value.trim();
         if (messageText === '') return;
 
-        // Render User Query Bubble
         const userMsg = document.createElement('div');
         userMsg.className = 'message outgoing';
         userMsg.textContent = messageText;
@@ -155,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        // Process Intelligent Assistant Response
         setTimeout(() => {
             const conciergeReply = document.createElement('div');
             conciergeReply.className = 'message incoming';
@@ -167,8 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (chatSend) chatSend.addEventListener('click', handleUserMessage);
     if (chatInput) {
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleUserMessage();
-        });
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserMessage(); });
     }
 });
