@@ -9,26 +9,38 @@
 </head>
 <body>
 
-    <div class="announcement-bar">
-        <p>Complimentary Worldwide Shipping on All Orders</p>
+   <div class="announcement-bar">
+    Complimentary Worldwide Shipping on All Luxury Orders
+</div>
+
+<header class="main-header">
+    <div class="logo">
+        <a href="index.html">Vogue Avenue</a>
     </div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="women.html">Women</a>
+        <a href="men.html">Men</a>
+        <a href="about.html">About Us</a>
+        <a href="size-chart.html">Size Chart</a>
+    </nav>
+    <div class="header-actions" style="display: flex; align-items: center; gap: 20px;">
+        <button id="search-trigger-btn" class="cart-icon-btn" aria-label="Search Site">
+            🔍
+        </button>
+        <button class="cart-icon-btn" id="cart-trigger">
+            🛒 <span id="cart-count">0</span>
+        </button>
+    </div>
+</header>
 
-    <header class="main-header">
-        <div class="logo">
-            <a href="#">Vogue Avenue</a>
-        </div>
-        <nav class="nav-links">
-            <a href="#women" class="nav-link">Women</a>
-            <a href="#men" class="nav-link">Men</a>
-        </nav>
-        <div class="header-actions">
-            <button id="cart-toggle-btn" class="cart-icon-btn">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span id="cart-count">0</span>
-            </button>
-        </div>
-    </header>
-
+<div id="search-overlay" class="search-overlay">
+    <button class="search-close-btn" id="search-close">&times;</button>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="SEARCH VOGUE AVENUE..." autocomplete="off">
+        <div id="search-results-grid" class="products-grid" style="margin-top: 40px;"></div>
+    </div>
+</div>
     <section class="hero-banner">
         <div class="hero-content">
             <h1>THE GOLD STANDARD</h1>
