@@ -1075,28 +1075,30 @@ body {
    PREMIUM LUXURY QUICK-VIEW MODAL WINDOW
    ========================================== */
 .product-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px); /* Safari support */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
     
-    /* Flexbox variables to guarantee absolute vertical & horizontal centering */
+    /* Absolute Centering Engine */
     display: flex !important; 
-    justify-content: center;
-    align-items: center;
+    justify-content: center !important;
+    align-items: center !important;
     
-    z-index: 9999; /* Forces modal over headers, footers, and floating widgets */
+    z-index: 99999 !important; /* Layers it over absolutely everything else */
     
-    /* CRITICAL FIX: Explicitly hide the modal by default */
+    /* FORCE HIDDEN STATE BY DEFAULT */
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
     
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
 }
 
 /* Activated State via JavaScript Class Toggle */
@@ -1107,67 +1109,67 @@ body {
 }
 
 .modal-content {
-    background-color: #0c0c0c;
-    border: 1px solid #d4af37; /* Clean luxury gold trim border fallback */
-    border: 1px solid var(--gold-primary, #d4af37);
-    padding: 40px;
-    max-width: 750px;
-    width: 90%;
-    position: relative;
+    background-color: #0c0c0c !important;
+    border: 1px solid var(--gold-primary, #d4af37) !important;
+    padding: 40px !important;
+    max-width: 750px !important;
+    width: 90% !important;
+    position: relative !important;
+    margin: auto !important; /* Guarantees centering pull from all sides */
     
-    /* Side-by-side alignment for image vs information metrics */
-    display: flex;
-    gap: 35px;
-    align-items: center;
+    /* Layout alignment split */
+    display: flex !important;
+    gap: 35px !important;
+    align-items: center !important;
     
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-/* Adds a crisp upscale pop transition when active */
+/* Upscale click-pop reveal transition */
 .product-modal.active .modal-content {
-    transform: scale(1);
+    transform: scale(1) !important;
 }
 
 .modal-close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 32px;
-    cursor: pointer;
-    line-height: 1;
-    transition: color 0.2s ease;
-    z-index: 10;
+    position: absolute !important;
+    top: 15px !important;
+    right: 20px !important;
+    background: none !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 32px !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    transition: color 0.2s ease !important;
+    z-index: 1020 !important;
 }
 
 .modal-close-btn:hover {
-    color: var(--gold-primary, #d4af37);
+    color: var(--gold-primary, #d4af37) !important;
 }
 
 .modal-left {
-    flex: 1;
-    max-width: 320px;
-    width: 100%;
+    flex: 1 !important;
+    max-width: 320px !important;
+    width: 100% !important;
 }
 
 .modal-left img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: block;
+    width: 100% !important;
+    height: 400px !important;
+    object-fit: cover !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    display: block !important;
 }
 
 .modal-right {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
 }
 
 /* ==========================================
@@ -1175,25 +1177,25 @@ body {
    ========================================== */
 @media (max-width: 768px) {
     .modal-content {
-        flex-direction: column;
-        padding: 30px 20px;
-        max-height: 85vh;
-        overflow-y: auto; /* Enables scrolling inside card if phone screen height is short */
-        gap: 20px;
+        flex-direction: column !important;
+        padding: 30px 20px !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important; /* Lets users scroll if their device height is short */
+        gap: 20px !important;
     }
     
     .modal-left {
-        max-width: 100%;
+        max-width: 100% !important;
     }
     
     .modal-left img {
-        height: 250px;
-        width: 100%;
+        height: 250px !important;
+        width: 100% !important;
     }
     
     .modal-right {
-        text-align: center;
-        width: 100%;
+        text-align: center !important;
+        width: 100% !important;
     }
 
     .product-options-wrapper {
