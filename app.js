@@ -348,7 +348,7 @@ function initAIChatbot() {
 
     function simulateAIResponse(userMessage) {
         const lowerMessage = userMessage.toLowerCase();
-        let reply = "Thank you for contacting the ATELIER Digital Concierge. A styling specialist will verify your request shortly.";
+        let reply = "Thank you for contacting the Vogue Avenue. A styling specialist will verify your request shortly.";
 
         if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
             reply = "We offer complimentary express worldwide shipping on all orders. Domestic shipments take 2-3 business days, while international shipping safely arrives within 5-7 business days.";
@@ -362,7 +362,7 @@ function initAIChatbot() {
             reply = `The Women's Collection balances premium luxury fabrics with exquisite modern structure. Exceptional examples include our "${womenItems[0].title}" ($${womenItems[0].price}) and the elegant "${womenItems[1].title}" ($${womenItems[1].price}).`;
         } 
         else if (lowerMessage.includes('size') || lowerMessage.includes('fit')) {
-            reply = "ATELIER garments are curated to a bespoke slim, elegant fit. When choosing an item, click 'Select Options' to view available metrics from Small up to XXL.";
+            reply = "Vogue Avenue garments are curated to a bespoke slim, elegant fit. When choosing an item, click 'Select Options' to view available metrics from Small up to XXL.";
         }
 
         appendMessage(reply, 'incoming');
