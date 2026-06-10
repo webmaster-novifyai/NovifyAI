@@ -142,7 +142,7 @@ a {
 }
 
 /* ==========================================================================
-   3. HERO BANNER PLACEMENT DESIGN SETTINGS
+   3. HERO BANNER DESIGN
    ========================================================================== */
 .category-hero {
     border-bottom: 1px solid var(--border-color);
@@ -156,12 +156,13 @@ a {
 }
 
 /* ==========================================================================
-   4. EDITORIAL CARDS PRODUCT EXPLOITATION GRID
+   4. PRODUCT GRID & CARDS
    ========================================================================== */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 40px 30px;
+    width: 100%;
 }
 
 .product-card {
@@ -265,7 +266,7 @@ a {
 }
 
 /* ==========================================================================
-   5. SLIDE-OUT SHOPPING DRAWERS ARCHITECTURE
+   5. SLIDE-OUT CART DRAWER
    ========================================================================== */
 .cart-drawer {
     position: fixed;
@@ -368,7 +369,7 @@ a {
 }
 
 /* ==========================================================================
-   6. FULL SCREEN LIVE VIEW MODAL INTERACTIVES
+   6. SEARCH OVERLAY
    ========================================================================== */
 .search-overlay {
     position: fixed;
@@ -431,7 +432,7 @@ a {
 }
 
 /* ==========================================================================
-   7. FLOATING CONCIERGE CHAT COMPONENT DESIGNS
+   7. FLOATING CONCIERGE CHAT WIDGET
    ========================================================================== */
 .ai-chat-widget {
     position: fixed;
@@ -554,7 +555,6 @@ a {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    max-height: calc(100% - 125px);
 }
 
 .message {
@@ -585,7 +585,6 @@ a {
     gap: 8px;
     background-color: var(--bg-secondary);
     height: 60px;
-    margin-top: auto;
 }
 
 #chat-input {
@@ -622,12 +621,12 @@ a {
 }
 
 /* ==========================================================================
-   8. FOOTER WORKSPACE GRID HOOKS
+   8. FOOTER ARCHITECTURE
    ========================================================================== */
 .site-footer {
     background-color: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
-    padding: 8px 0 0 0;
+    padding: 60px 4% 30px 4%;
     margin-top: 100px;
 }
 
@@ -635,11 +634,11 @@ a {
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    padding: 60px 4%;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 40px;
+    padding-bottom: 40px;
 }
 
 .footer-column {
@@ -695,15 +694,9 @@ a {
     color: var(--gold-primary);
 }
 
-.social-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .footer-bottom {
     border-top: 1px solid var(--border-color);
-    padding: 30px 4%;
+    padding-top: 30px;
     text-align: center;
 }
 
@@ -715,267 +708,113 @@ a {
 }
 
 /* ==========================================================================
-   9. FIXED SCREEN-CENTERED DYNAMIC PRODUCT MODAL
+   9. FIXED QUICK-VIEW PRODUCT MODAL
    ========================================================================== */
 .product-modal {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background-color: rgba(0, 0, 0, 0.85) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 99999 !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    visibility: hidden !important;
-    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .product-modal.active {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
 }
 
 .modal-content {
-    background-color: #0c0c0c !important;
-    border: 1px solid var(--gold-primary, #d4af37) !important;
-    padding: 40px !important;
-    max-width: 750px !important;
-    width: 90% !important;
-    position: relative !important;
-    margin: auto !important; 
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 35px !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9) !important;
-    transform: scale(0.9) !important;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    background-color: #0c0c0c;
+    border: 1px solid var(--gold-primary);
+    padding: 40px;
+    max-width: 750px;
+    width: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .product-modal.active .modal-content {
-    transform: scale(1) !important;
+    transform: scale(1);
 }
 
 .modal-close-btn {
-    position: absolute !important;
-    top: 15px !important;
-    right: 20px !important;
-    background: none !important;
-    border: none !important;
-    color: #ffffff !important;
-    font-size: 32px !important;
-    cursor: pointer !important;
-    line-height: 1 !important;
-    z-index: 100 !important;
-    transition: color 0.2s ease !important;
-}
-
-.modal-close-btn:hover {
-    color: var(--gold-primary, #d4af37) !important;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 32px;
+    cursor: pointer;
+    line-height: 1;
 }
 
 .modal-left {
-    flex: 1 !important;
-    max-width: 320px !important;
-    width: 100% !important;
+    flex: 1;
+    max-width: 320px;
 }
 
 .modal-left img {
-    width: 100% !important;
-    height: 400px !important;
-    object-fit: cover !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    display: block !important;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
 }
 
 .modal-right {
-    flex: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    text-align: left !important;
-}
-
-.modal-right h2 {
-    color: #fff !important; 
-    margin: 0 0 10px 0 !important; 
-    font-size: 24px !important; 
-    letter-spacing: 1px !important;
-    font-family: var(--font-luxury) !important;
-    font-weight: 400 !important;
-}
-
-.modal-right p {
-    color: var(--gold-primary, #d4af37) !important; 
-    font-size: 20px !important; 
-    font-weight: 600 !important; 
-    margin: 0 0 25px 0 !important;
-}
-
-.modal-options-row {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-    align-items: flex-start !important;
-    width: 100% !important;
-    margin-bottom: 15px !important;
-}
-
-.modal-options-row label {
-    font-size: 11px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    color: #aaa !important;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* ==========================================================================
    10. MOBILE & TABLET DEVICE RESPONSIVE BREAKPOINTS
    ========================================================================== */
 @media (max-width: 992px) {
-    .container {
-        width: 95%;
-        padding: 0 15px;
-    }
-    .main-header {
-        padding: 15px 20px;
-    }
-    .nav-links {
-        gap: 20px;
-    }
-    .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px 20px;
-    }
+    .main-header { padding: 15px 20px; }
+    .nav-links { gap: 20px; }
+    .products-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 }
 
 @media (max-width: 768px) {
-    .main-header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 15px 10px;
-    }
-    .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        width: 100%;
-    }
+    .main-header { flex-direction: column; gap: 15px; }
+    .nav-links { justify-content: center; flex-wrap: wrap; gap: 15px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px 10px; }
+    .product-image { height: 240px; }
+    .cart-drawer { width: 100%; right: -100%; }
     
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important; 
-        gap: 15px 10px;
-    }
-    .product-image {
-        height: 240px; 
-    }
-    .product-title {
-        font-size: 14px;
-        height: 38px;
-        overflow: hidden;
-    }
-    
-    .cart-drawer {
-        width: 100% !important;
-        right: -100%;
-    }
-    
-    .modal-content {
-        flex-direction: column !important;
-        padding: 25px 20px !important;
-        max-height: 85vh !important;
-        overflow-y: auto !important; 
-        gap: 15px !important;
-    }
-    .modal-left {
-        max-width: 100% !important;
-    }
-    .modal-left img {
-        height: 220px !important;
-    }
-    .modal-right {
-        text-align: center !important;
-        width: 100% !important;
-    }
-    .modal-options-row {
-        align-items: center !important;
-    }
-    
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-        gap: 30px;
-    }
-    .brand-column {
-        max-width: 100%;
-    }
-    .footer-description {
-        margin: 0 auto;
-    }
+    .modal-content { flex-direction: column; max-height: 85vh; overflow-y: auto; }
+    .modal-left { max-width: 100%; }
+    .modal-left img { height: 220px; }
 
-    /* ==========================================================================
-       MOBILE CONCIERGE CHAT ENGINE FIXES
-       ========================================================================== */
-    .ai-chat-widget {
-        bottom: 20px !important;
-        right: 20px !important;
-    }
-    
+    /* CRITICAL MOBILE CHAT BOX WINDOW CAP SCALE */
+    .ai-chat-widget { bottom: 20px; right: 20px; }
     .chat-window {
-        position: fixed !important;
-        top: auto !important;
-        left: 5% !important;
-        right: 5% !important;
-        bottom: 85px !important; 
-        width: 90vw !important;
-        height: 80vh !important; /* Forces strict 80% screen space ceiling */
-        border: 1px solid var(--gold-primary) !important;
-        border-radius: 12px !important;
-        z-index: 999999 !important;
-        transform-origin: bottom center !important;
+        position: fixed;
+        bottom: 85px; /* Floats safely above native mobile browser bars */
+        left: 5%;
+        right: 5%;
+        width: 90vw;
+        height: 80vh; /* Locks structure directly to 80% screen space window */
+        border-radius: 12px;
     }
-
-    .chat-window.hidden {
-        transform: scale(0.9) translateY(30px) !important;
-        opacity: 0 !important;
-    }
-
-    .chat-header {
-        padding: 15px !important;
-        height: 65px !important;
-    }
-
     .chat-messages {
-        padding: 15px !important;
-        overflow-y: auto !important;
-        max-height: calc(100% - 125px) !important; 
-    }
-
-    .chat-input-area {
-        padding: 12px !important;
-        height: 60px !important;
-        background-color: var(--bg-secondary) !important;
-        margin-top: auto !important; 
-    }
-}
-
-@media (max-width: 480px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px;
-    }
-    .product-image {
-        height: 180px; 
-    }
-    .logo a {
-        font-size: 22px;
+        max-height: calc(100% - 125px); /* Ensures messages scroll inside box, never squishing input */
     }
 }
