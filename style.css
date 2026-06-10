@@ -265,7 +265,7 @@ a {
 }
 
 /* ==========================================================================
-   5. SLIDE-OUT SHOPPING DRAWERS ARCHISTANCE
+   5. SLIDE-OUT SHOPPING DRAWERS ARCHITECTURE
    ========================================================================== */
 .cart-drawer {
     position: fixed;
@@ -840,7 +840,7 @@ a {
 /* ==========================================================================
    10. MOBILE & TABLET DEVICE RESPONSIVE BREAKPOINTS
    ========================================================================== */
-@media (max-width: 900px) {
+@media (max-width: 992px) {
     .container {
         width: 95%;
         padding: 0 15px;
@@ -857,7 +857,7 @@ a {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .main-header {
         flex-direction: column;
         gap: 15px;
@@ -923,45 +923,51 @@ a {
     }
 
     /* ==========================================================================
-       MOBILE CONCIERGE CHAT ENGINE RENDER REFACTORING
+       MOBILE CONCIERGE CHAT ENGINE RENDER FIXED REFACTORING
        ========================================================================== */
     .ai-chat-widget {
         bottom: 20px !important;
         right: 20px !important;
     }
     
-    /* Converts chat panel into a gorgeous, clean full-screen layout on phone viewports */
+    /* Configures chat window to occupy exactly 80% height, floating firmly above toolbars */
     .chat-window {
         position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        border: none !important;
-        border-radius: 0 !important;
-        z-index: 999999 !important; /* Positions it over everything including headers */
-        transform-origin: center center !important;
+        top: auto !important;
+        left: 5% !important;
+        right: 5% !important;
+        bottom: 85px !important; /* Positions it safely above mobile browser navigation menus */
+        width: 90vw !important;
+        height: 80vh !important; /* Locks structural layout scale strictly to 80% viewport footprint */
+        border: 1px solid var(--gold-primary) !important;
+        border-radius: 12px !important;
+        z-index: 999999 !important;
+        transform-origin: bottom center !important;
     }
 
     .chat-window.hidden {
-        transform: scale(0.95) !important;
+        transform: scale(0.9) translateY(30px) !important;
         opacity: 0 !important;
     }
 
     .chat-header {
-        padding: 20px 15px !important;
+        padding: 15px !important;
+        height: 65px !important;
     }
 
-    /* Expands the live message grid view to fill mobile screen estate safely */
+    /* Ensures messages stream inside a fluid scroll box contextually sized */
     .chat-messages {
-        padding: 20px 15px !important;
+        padding: 15px !important;
+        overflow-y: auto !important;
+        max-height: calc(100% - 125px) !important; /* Reserves room for header/footer so input never gets compressed */
     }
 
+    /* Keeps the input area fixed at the bottom of the container, fully visible */
     .chat-input-area {
-        padding: 15px 12px !important;
-        padding-bottom: calc(15px + env(safe-area-inset-bottom)) !important; /* Protects layout on modern devices */
+        padding: 12px !important;
+        height: 60px !important;
+        background-color: var(--bg-secondary) !important;
+        margin-top: auto !important; /* Pushes input layout firmly down into frame footing */
     }
 }
 
