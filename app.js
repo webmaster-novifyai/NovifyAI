@@ -66,11 +66,48 @@ let selectedProductModal = null;
 // ==========================================
 // 2. MASTER APP INITIALIZATION
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
-    initCartEventHandlers();
-    initAIChatbot();
+document.addEventListener("DOMContentLoaded", () => {
+    // --- Product Catalog Render Setup ---
+    const womenGrid = document.getElementById("women-grid");
+    const menGrid = document.getElementById("men-grid");
+
+    // Clear and build Women's items if on women.html
+    if (womenGrid) {
+        womenGrid.innerHTML = "";
+        const womenProducts = products.filter(p => p.category === "women");
+        renderCategoryCards(womenProducts, womenGrid);
+    }
+
+    // Clear and build Men's items if on men.html
+    if (menGrid) {
+        menGrid.innerHTML = "";
+        const menProducts = products.filter(p => p.category === "men");
+        renderCategoryCards(menProducts, menGrid);
+    }
 });
+
+// Reusable card building block function
+function renderCategoryCards(filteredList, placementGrid) {
+    if (filteredList.length === 0) {
+        placementGrid.innerHTML = `<p class="empty-message">No couture items found in this section.</p>`;
+        return;
+    }
+    filteredList.forEach(product => {
+        const itemCard = document.createElement("div");
+        itemCard.className = "product-card";
+        itemCard.innerHTML = `
+            <div class="image-container">
+                <img src="${product.img}" alt="${product.title}" class="product-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">${product.title}</h3>
+                <p class="product-price">$${product.price.toFixed(2)}</p>
+                <button class="btn-add-cart" onclick="addToCart('${product.id}')">Add To Bag</button>
+            </div>
+        `;
+        placementGrid.appendChild(itemCard);
+    });
+}
 // =================== AI chat Bot=====================
 document.addEventListener("DOMContentLoaded", () => {
     // --- AI Chatbot Elements ---
