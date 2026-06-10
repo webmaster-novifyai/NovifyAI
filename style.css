@@ -265,7 +265,7 @@ a {
 }
 
 /* ==========================================================================
-   5. SLIDE-OUT SHOPPING DRAWERS ARCHITECTURE
+   5. SLIDE-OUT SHOPPING DRAWERS ARCHISTANCE
    ========================================================================== */
 .cart-drawer {
     position: fixed;
@@ -920,6 +920,48 @@ a {
     }
     .footer-description {
         margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       MOBILE CONCIERGE CHAT ENGINE RENDER REFACTORING
+       ========================================================================== */
+    .ai-chat-widget {
+        bottom: 20px !important;
+        right: 20px !important;
+    }
+    
+    /* Converts chat panel into a gorgeous, clean full-screen layout on phone viewports */
+    .chat-window {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        border: none !important;
+        border-radius: 0 !important;
+        z-index: 999999 !important; /* Positions it over everything including headers */
+        transform-origin: center center !important;
+    }
+
+    .chat-window.hidden {
+        transform: scale(0.95) !important;
+        opacity: 0 !important;
+    }
+
+    .chat-header {
+        padding: 20px 15px !important;
+    }
+
+    /* Expands the live message grid view to fill mobile screen estate safely */
+    .chat-messages {
+        padding: 20px 15px !important;
+    }
+
+    .chat-input-area {
+        padding: 15px 12px !important;
+        padding-bottom: calc(15px + env(safe-area-inset-bottom)) !important; /* Protects layout on modern devices */
     }
 }
 
