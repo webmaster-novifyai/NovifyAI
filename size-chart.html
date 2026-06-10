@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Size Chart | Vogue Avenue Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .size-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 14px;
+            text-align: center;
+        }
+        .size-table th {
+            background-color: var(--black-secondary);
+            color: var(--gold-primary);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .size-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        .size-table tr:nth-child(even) {
+            background-color: rgba(25, 25, 25, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <main class="container" style="max-width: 900px; margin: 0 auto;">
+        <h1 class="section-title">Luxury Apparel Fit Guide</h1>
+        
+        <h3 style="color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; font-size: 16px;">Women's Ensemble Measurements</h3>
+        <table class="size-table">
+            <thead>
+                <tr>
+                    <th>Size Tag</th>
+                    <th>Bust (Inches)</th>
+                    <th>Waist (Inches)</th>
+                    <th>Hips (Inches)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>XS (34)</td><td>32 - 33</td><td>24 - 25</td><td>34 - 35</td></tr>
+                <tr><td>S (36)</td><td>34 - 35</td><td>26 - 27</td><td>36 - 37</td></tr>
+                <tr><td>M (38)</td><td>36 - 37</td><td>28 - 29</td><td>38 - 39</td></tr>
+                <tr><td>L (40)</td><td>38 - 40</td><td>30 - 32</td><td>40 - 42</td></tr>
+                <tr><td>XL (42)</td><td>41 - 43</td><td>33 - 35</td><td>43 - 45</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; margin-top: 50px; font-size: 16px;">Men's Tailoring Measurements</h3>
+        <table class="size-table">
+            <thead>
+                <tr>
+                    <th>Size Tag</th>
+                    <th>Chest (Inches)</th>
+                    <th>Waist (Inches)</th>
+                    <th>Neck (Inches)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>S (38)</td><td>36 - 38</td><td>30 - 31</td><td>14 - 14.5</td></tr>
+                <tr><td>M (40)</td><td>39 - 41</td><td>32 - 34</td><td>15 - 15.5</td></tr>
+                <tr><td>L (42)</td><td>42 - 44</td><td>36 - 38</td><td>16 - 16.5</td></tr>
+                <tr><td>XL (44)</td><td>45 - 47</td><td>40 - 42</td><td>17 - 17.5</td></tr>
+            </tbody>
+        </table>
+    </main>
+
+    </body>
+</html>
