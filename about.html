@@ -47,7 +47,31 @@
             </p>
         </div>
     </main> 
+ <div class="ai-chat-widget">
+        <button class="chat-toggle-btn-floating" id="chat-toggle">
+            <span>💬</span> Vogue Avenue
+        </button>
 
+        <div class="chat-window hidden" id="chat-window">
+            <div class="chat-header">
+                <div class="chat-avatar">VA</div>
+                <div class="chat-status-info">
+                    <h4>Vogue Avenue</h4>
+                    <p><span class="status-dot"></span> AI Assistant</p>
+                </div>
+                <button class="chat-close-x" id="chat-close">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message incoming">
+                    Welcome to Vogue Avenue. I am your digital concierge. How may I assist you with our collections today?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about styles, sizes..." autocomplete="off">
+                <button id="chat-send">Send</button>
+            </div>
+        </div>
+    </div>
 
  <footer class="site-footer">
         <div class="footer-container">
