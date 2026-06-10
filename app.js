@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================================================
-    // 1. ALL LUXURY INVENTORY PRODUCTS DATA
-    // ==========================================================================
+    
+    // ==========================================
+    // 1. ALL LUXURY INVENTORY DATA
+    // ==========================================
     const luxuryInventory = {
         women: [
             { id: 'w1', title: 'Silk Satin Evening Gown', price: 1250.00, image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=600', sizes: ['XS', 'S', 'M', 'L'] },
@@ -17,15 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     };
 
-    // ==========================================================================
-    // 2. DETECT CURRENT PAGE AND INJECT PRODUCTS
-    // ==========================================================================
+    // ==========================================
+    // 2. DYNAMIC INVENTORY INJECTION ENGINE
+    // ==========================================
     const targetGrid = document.getElementById('collection-products-grid');
     if (targetGrid) {
-        targetGrid.innerHTML = ''; // Wipe placeholder text cleanly
-        
-        // Infer page collection category type based on target attributes
-        const requestedCategory = targetGrid.dataset.category; // 'women' or 'men'
+        targetGrid.innerHTML = ''; 
+        const requestedCategory = targetGrid.dataset.category; 
         const productsToRender = luxuryInventory[requestedCategory];
 
         if (productsToRender) {
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Handle Add to Shopping Bag Action Clicks
+        // Cart counter click actions
         targetGrid.addEventListener('click', (e) => {
             if (e.target.classList.contains('btn-add-cart')) {
                 const card = e.target.closest('.product-card');
@@ -62,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const size = card.querySelector('.luxury-size-selector').value;
                 
                 alert(`Added ${title} (Size ${size}) to your Shopping Bag.`);
-                
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) {
                     cartCount.textContent = parseInt(cartCount.textContent || '0') + 1;
@@ -71,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================================================
-    // 3. GLOBAL INTERACTION LAYOUT HOOKS (CHAT, DRAWER, SEARCH)
-    // ==========================================================================
+    // ==========================================
+    // 3. GLOBAL NAVIGATION CONTROL ARCHITECTURE
+    // ==========================================
     const chatToggle = document.getElementById('chat-toggle');
     const chatWindow = document.getElementById('chat-window');
     const chatClose = document.getElementById('chat-close');
@@ -89,7 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchOverlay = document.getElementById('search-overlay');
     const searchCloseBtn = document.getElementById('search-close-btn');
 
-    // Chat widget Visibility toggle actions
+    const productModal = document.getElementById('product-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // Chat Toggle Actions
     if (chatToggle && chatWindow) {
         chatToggle.addEventListener('click', (e) => { e.stopPropagation(); chatWindow.classList.toggle('hidden'); });
         if (chatClose) { chatClose.addEventListener('click', (e) => { e.stopPropagation(); chatWindow.classList.add('hidden'); }); }
@@ -97,39 +98,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', () => chatWindow.classList.add('hidden'));
     }
 
-    // Cart and Search View handlers
+    // Cart Drawer Toggle
     if (cartTrigger && cartDrawer) cartTrigger.addEventListener('click', () => cartDrawer.classList.add('active'));
     if (cartCloseBtn && cartDrawer) cartCloseBtn.addEventListener('click', () => cartDrawer.classList.remove('active'));
+
+    // Search Interface Toggle
     if (searchTrigger && searchOverlay) searchTrigger.addEventListener('click', () => searchOverlay.classList.add('active'));
     if (searchCloseBtn && searchOverlay) searchCloseBtn.addEventListener('click', () => searchOverlay.classList.remove('active'));
 
-    // ==========================================================================
-    // 4. INTELLIGENT KEYWORD CONCIERGE CHAT ENGINE RESPONSE SCHEDULER
-    // ==========================================================================
+    // Quick-View Product Modal Close Trigger
+    if (modalCloseBtn && productModal) {
+        modalCloseBtn.addEventListener('click', () => productModal.classList.remove('active'));
+    }
+
+    // ==========================================
+    // 4. INTELLIGENT KEYWORD CONCIERGE CHAT ENGINE
+    // ==========================================
     function generateSmartBotReply(input) {
-        const text = input.toLowerCase();
+        const text = input.toLowerCase().trim();
         
         if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
-            return "Good day. Welcome back to Vogue Avenue. Are you exploring our women's evening collections or premium men's tailoring today?";
+            return "Good day and welcome to Vogue Avenue. Are you exploring our women's evening couture collections or premium men's tailoring lines today?";
         }
-        if (text.includes('size') || text.includes('fit') || text.includes('chart')) {
-            return "Our items follow true Italian precision sizing rules. You can review exact measurements directly on our structured Size Chart link in the header menu or footer area.";
+        if (text.includes('size') || text.includes('fit') || text.includes('chart') || text.includes('small') || text.includes('large')) {
+            return "Our couture items follow precision Italian sizing configurations. You can review exact body measurements on our Size Chart page available in the main header navigation navigation links menu.";
         }
         if (text.includes('women') || text.includes('dress') || text.includes('gown') || text.includes('coat')) {
-            return "Our Women's Atelier focuses on ultimate refinement. The Silk Satin Evening Gown and Cashmere Double-Breasted Coat are currently among our highest-demanded collection masterworks.";
+            return "Our Women's Atelier focuses on complete textile refinement. The Silk Satin Evening Gown ($1,250.00) and Cashmere Double-Breasted Coat ($1,850.00) are currently among our highlighted showcase items.";
         }
         if (text.includes('men') || text.includes('suit') || text.includes('tuxedo') || text.includes('boot')) {
-            return "The Men's Tailoring line highlights sharp, architectural structures. I highly recommend viewing our Slim-Fit Wool Velvet Tuxedo for any luxury gala arrangements.";
+            return "The Men's Tailoring line accentuates structured silhouettes. I highly recommend taking a look at our masterwork Slim-Fit Wool Velvet Tuxedo ($2,100.00) for upcoming formal luxury galas.";
         }
-        if (text.includes('shipping') || text.includes('delivery') || text.includes('order')) {
-            return "Vogue Avenue provides secure, insured, worldwide priority transit handling on all couture requests. Delivery windows typically take 3-5 business days.";
+        if (text.includes('shipping') || text.includes('delivery') || text.includes('order') || text.includes('track')) {
+            return "Vogue Avenue offers secure, premium insured, priority worldwide transit courier handling on all fashion requests. Delivery typically takes between 3 to 5 business days.";
         }
         if (text.includes('price') || text.includes('cost') || text.includes('expensive')) {
-            return "As an elite luxury atelier, our prices reflect authentic premium fabrics, master heritage engineering methods, and entirely exclusive batch runs.";
+            return "As an elite luxury brand house, our price tiers reflect premium Italian fabrics, master heritage engineering methods, and entirely exclusive batch numbers.";
         }
         
-        // Sophisticated default message loop fallback breaker
-        return "Thank you for sharing your fashion criteria. Your query has been logged by our VIP concierge team. Let me know if you would like me to unpack detail aspects of our collection materials.";
+        // Context fallback response
+        return "Thank you for detailing your style preferences. Your query has been passed over to our VIP Personal Concierge Desk. Please let me know if you would like specifics regarding the textiles or sizes of our current collection lines.";
     }
 
     function handleUserMessage() {
@@ -138,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageText = chatInput.value.trim();
         if (messageText === '') return;
 
-        // Render User Query
+        // Render User Query Bubble
         const userMsg = document.createElement('div');
         userMsg.className = 'message outgoing';
         userMsg.textContent = messageText;
@@ -147,14 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
         chatInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        // Process Intelligent Chat AI Simulation Reply
+        // Process Intelligent Assistant Response
         setTimeout(() => {
             const conciergeReply = document.createElement('div');
             conciergeReply.className = 'message incoming';
             conciergeReply.textContent = generateSmartBotReply(messageText);
             chatMessages.appendChild(conciergeReply);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 800);
+        }, 600);
     }
 
     if (chatSend) chatSend.addEventListener('click', handleUserMessage);
