@@ -29,6 +29,14 @@
         </div>
     </header>
 
+    <div id="search-overlay" class="search-overlay">
+        <button class="search-close-btn" id="search-close-btn">&times;</button>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="SEARCH VOGUE AVENUE..." autocomplete="off">
+            <div id="search-results-grid" class="products-grid" style="margin-top: 40px;"></div>
+        </div>
+    </div>
+
     <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600') center/cover; padding: 80px 4%; text-align: center;">
         <h1 class="section-title" style="color: white; font-size: 36px; letter-spacing: 5px;">Women's Couture</h1>
         <p style="color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; margin-top: 10px;">Unrivaled elegance engineered for distinction</p>
@@ -39,6 +47,23 @@
             <p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">Loading curated collection lines...</p>
         </div>
     </main>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3>Your Shopping Bag</h3>
+            <button id="cart-close-btn" class="close-btn">&times;</button>
+        </div>
+        <div id="cart-items-container" class="cart-items-container">
+            <p class="empty-message">Your cart is currently empty.</p>
+        </div>
+        <div class="cart-drawer-footer">
+            <div class="cart-total-row">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">$0.00</span>
+            </div>
+            <button class="btn-checkout" onclick="alert('Proceeding to secure checkout gateway...')">Proceed to Checkout</button>
+        </div>
+    </div>
 
     <div class="ai-chat-widget">
         <button class="chat-toggle-btn-floating" id="chat-toggle">💬 Vogue Avenue</button>
@@ -61,10 +86,16 @@
         </div>
     </div>
 
-    <div id="cart-drawer" class="cart-drawer">
-        <div class="cart-drawer-header"><h3>Your Shopping Bag</h3><button id="cart-close-btn" class="close-btn">&times;</button></div>
-        <div id="cart-items-container" class="cart-items-container"><p class="empty-message">Your cart is currently empty.</p></div>
-        <div class="cart-drawer-footer"><div class="cart-total-row"><span>Subtotal:</span><span id="cart-subtotal">$0.00</span></div><button class="btn-checkout">Proceed to Checkout</button></div>
+    <div id="product-modal" class="product-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            <div class="modal-left" id="modal-product-img-container"></div>
+            <div class="modal-right">
+                <h2 id="modal-product-title"></h2>
+                <p id="modal-product-price"></p>
+                <button id="modal-add-to-bag-btn" class="btn-add-cart">Add To Shopping Bag</button>
+            </div>
+        </div>
     </div>
 
     <footer class="site-footer">
