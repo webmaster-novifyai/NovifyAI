@@ -1,113 +1,153 @@
 // ==========================================
-// 1. DATA SOURCES & GLOBAL STATE
+// 1. VOGUE AVENUE MASTER CATALOG DATA
 // ==========================================
-
-// Luxury Inventory with Extended Color Palette
-// --- Data Source: Vogue Avenue Store Luxury Inventory ---
 const products = [
-    // Women's Luxury Collection (Vogue Avenue Curated)
-    { id: 'w1', category: 'women', title: 'Crimson Velvet Embroidered Anarkali', price: 245.00, img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w2', category: 'women', title: 'Royal Silk Brocade Festive Suit', price: 280.00, img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w3', category: 'women', title: 'Midnight Onyx Tailored Blazer Set', price: 295.00, img: 'https://images.unsplash.com/photo-1611042553975-08733608b2db?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w4', category: 'women', title: 'Organza Pastel Floral Luxury Kurta', price: 210.00, img: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w5', category: 'women', title: 'Handcrafted Ivory Premium Ensemble', price: 395.00, img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w6', category: 'women', title: 'Sage Georgette Detailed Festive Wear', price: 320.00, img: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w7', category: 'women', title: 'Blush Pink Organza Statement Dress', price: 185.00, img: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w8', category: 'women', title: 'Embellished Jacquard Modern Suit', price: 260.00, img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w9', category: 'women', title: 'Monochrome Designer Occasion Suit', price: 225.00, img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=600&auto=format&fit=crop' },
-    { id: 'w10', category: 'women', title: 'Premium Mulberry Silk Kurta Set', price: 275.00, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop' },
+    // --- Women's Couture Collection ---
+    {
+        id: "w-01",
+        title: "Onyx Velvet Evening Gown",
+        price: 850.00,
+        category: "women",
+        img: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=600",
+        sizes: ["XS", "S", "M", "L", "XL"]
+    },
+    {
+        id: "w-02",
+        title: "Midnight Gold Embroidered Blazer",
+        price: 1200.00,
+        category: "women",
+        img: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600",
+        sizes: ["S", "M", "L"]
+    },
+    {
+        id: "w-03",
+        title: "Baroque Silk Pantsuit",
+        price: 950.00,
+        category: "women",
+        img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=600",
+        sizes: ["XS", "S", "M", "L", "XL"]
+    },
+    {
+        id: "w-04",
+        title: "Gilded Rose Silk Cocktail Dress",
+        price: 750.00,
+        category: "women",
+        img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=600",
+        sizes: ["XS", "S", "M", "L"]
+    },
 
-    // Men's Collection (10 Products)
-    { id: 'm1', category: 'men', title: 'Midnight Black Bespoke Tuxedo', price: 450.00, img: 'https://images.unsplash.com/photo-1593032465175-481da7e47352?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm2', category: 'men', title: 'Charcoal Wool Double-Breasted Suit', price: 420.00, img: 'https://images.unsplash.com/photo-1598805981116-804455e69b7e?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm3', category: 'men', title: 'Classic Navy Italian Cut Suit', price: 390.00, img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm4', category: 'men', title: 'Golden Thread Embroidered Sherwani', price: 550.00, img: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm5', category: 'men', title: 'Premium Silk Blend Kurta Pajama', price: 175.00, img: 'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm6', category: 'men', title: 'Deep Maroon Velvet Dinner Jacket', price: 310.00, img: 'https://images.unsplash.com/photo-1621594500145-50a98b48443e?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm7', category: 'men', title: 'Slim Fit Slate Grey 3-Piece Suit', price: 480.00, img: 'https://images.unsplash.com/photo-1592844306505-72476d8c552c?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm8', category: 'men', title: 'Tailored Tan Summer Linen Suit', price: 290.00, img: 'https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm9', category: 'men', title: 'Regal Emerald Bandhgala Suit', price: 520.00, img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop' },
-    { id: 'm10', category: 'men', title: 'Classic Houndstooth Executive Suit', price: 460.00, img: 'https://images.unsplash.com/photo-1505632951788-8b8222138331?q=80&w=600&auto=format&fit=crop' }
+    // --- Men's Tailoring Collection ---
+    {
+        id: "m-01",
+        title: "Classic Obsidian Three-Piece Tuxedo",
+        price: 1100.00,
+        category: "men",
+        img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600",
+        sizes: ["38R", "40R", "42R", "44R", "46R"]
+    },
+    {
+        id: "m-02",
+        title: "Imperial Gold Brocade Blazer",
+        price: 1350.00,
+        category: "men",
+        img: "https://images.unsplash.com/photo-1621570161042-bbaf0d2d312a?q=80&w=600",
+        sizes: ["40R", "42R", "44R"]
+    },
+    {
+        id: "m-03",
+        title: "Midnight Wool Double-Breasted Suit",
+        price: 1250.00,
+        category: "men",
+        img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=600",
+        sizes: ["38R", "40R", "42R", "44R", "46R"]
+    },
+    {
+        id: "m-04",
+        title: "Sovereign Velvet Smoking Jacket",
+        price: 900.00,
+        category: "men",
+        img: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?q=80&w=600",
+        sizes: ["S", "M", "L", "XL"]
+    }
 ];
-
-
-// Extended Color Palette - 22 Premium Colors
-const colorPalette = [
-    { name: 'Midnight Black', hex: '#111111' },
-    { name: 'Charcoal Grey', hex: '#36454F' },
-    { name: 'Deep Navy', hex: '#002040' },
-    { name: 'Gold', hex: '#D4AF37' },
-    { name: 'Rose Gold', hex: '#B76E79' },
-    { name: 'Emerald Green', hex: '#046307' },
-    { name: 'Sapphire Blue', hex: '#0F52BA' },
-    { name: 'Burgundy', hex: '#800020' },
-    { name: 'Wine Red', hex: '#722F37' },
-    { name: 'Plum Purple', hex: '#660066' },
-    { name: 'Forest Green', hex: '#228B22' },
-    { name: 'Teal', hex: '#008080' },
-    { name: 'Copper', hex: '#B87333' },
-    { name: 'Silver', hex: '#C0C0C0' },
-    { name: 'Champagne', hex: '#F7E7CE' },
-    { name: 'Ivory', hex: '#FFFFF0' },
-    { name: 'Burgundy Wine', hex: '#8B0000' },
-    { name: 'Slate Blue', hex: '#6A5ACD' },
-    { name: 'Mustard Yellow', hex: '#FFDB58' },
-    { name: 'Deep Brown', hex: '#654321' },
-    { name: 'Petrol Blue', hex: '#004B49' },
-    { name: 'Maroon', hex: '#800000' }
-];
-
-const standardSizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
-
-// Shopping Cart & Modal Application State
-let cart = [];
-let selectedProductModal = null;
 
 // ==========================================
-// 2. MASTER APP INITIALIZATION
+// 2. DYNAMIC RENDERING FRAMEWORK
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // --- Product Catalog Render Setup ---
     const womenGrid = document.getElementById("women-grid");
     const menGrid = document.getElementById("men-grid");
 
-    // Clear and build Women's items if on women.html
+    // Initialize Women's Grid if current view context matches
     if (womenGrid) {
-        womenGrid.innerHTML = "";
         const womenProducts = products.filter(p => p.category === "women");
-        renderCategoryCards(womenProducts, womenGrid);
+        renderLuxuryGrid(womenProducts, womenGrid);
     }
 
-    // Clear and build Men's items if on men.html
+    // Initialize Men's Grid if current view context matches
     if (menGrid) {
-        menGrid.innerHTML = "";
         const menProducts = products.filter(p => p.category === "men");
-        renderCategoryCards(menProducts, menGrid);
+        renderLuxuryGrid(menProducts, menGrid);
     }
 });
 
-// Reusable card building block function
-function renderCategoryCards(filteredList, placementGrid) {
-    if (filteredList.length === 0) {
-        placementGrid.innerHTML = `<p class="empty-message">No couture items found in this section.</p>`;
+// Render function displaying title, imagery, price, and variant selector options
+function renderLuxuryGrid(itemsList, targetContainer) {
+    targetContainer.innerHTML = "";
+    
+    if (itemsList.length === 0) {
+        targetContainer.innerHTML = `<p class="empty-message">No couture configurations found.</p>`;
         return;
     }
-    filteredList.forEach(product => {
-        const itemCard = document.createElement("div");
-        itemCard.className = "product-card";
-        itemCard.innerHTML = `
+
+    itemsList.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        
+        // Generate Size Select Options based on array values
+        let sizeOptionsHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join("");
+
+        card.innerHTML = `
             <div class="image-container">
-                <img src="${product.img}" alt="${product.title}" class="product-image">
+                <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
             </div>
             <div class="product-info">
                 <h3 class="product-title">${product.title}</h3>
                 <p class="product-price">$${product.price.toFixed(2)}</p>
-                <button class="btn-add-cart" onclick="addToCart('${product.id}')">Add To Bag</button>
+                
+                <div class="product-options-wrapper">
+                    <label for="size-${product.id}">Select Size:</label>
+                    <select id="size-${product.id}" class="luxury-size-selector">
+                        ${sizeOptionsHTML}
+                    </select>
+                </div>
+
+                <button class="btn-add-cart" onclick="processAddToBag('${product.id}')">Add To Bag</button>
             </div>
         `;
-        placementGrid.appendChild(itemCard);
+        targetContainer.appendChild(card);
     });
 }
+
+// ==========================================
+// 3. INTERACTIVE BAG ADDITION DISPATCHER
+// ==========================================
+window.processAddToBag = function(productId) {
+    const productElement = products.find(p => p.id === productId);
+    const sizeSelector = document.getElementById(`size-${productId}`);
+    const selectedSize = sizeSelector ? sizeSelector.value : "Standard";
+
+    if (!productElement) return;
+
+    // Dispatch target data array layout structure to your local cart array
+    // (Assuming your cart implementation uses a push layout mechanism)
+    alert(`Added to Bag:\n${productElement.title}\nSize: ${selectedSize}\nPrice: $${productElement.price.toFixed(2)}`);
+    
+    // Call your existing calculation functions if present in script workspace:
+    // example: updateCartTotals(productElement, selectedSize);
+};
+
+
 // =================== AI chat Bot=====================
 document.addEventListener("DOMContentLoaded", () => {
     // --- AI Chatbot Elements ---
