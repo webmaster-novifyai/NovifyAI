@@ -71,8 +71,74 @@ document.addEventListener('DOMContentLoaded', () => {
     initCartEventHandlers();
     initAIChatbot();
 });
+// =================== AI chat Bot=====================
+document.addEventListener("DOMContentLoaded", () => {
+    // --- AI Chatbot Elements ---
+    const chatToggle = document.getElementById("chat-toggle");
+    const chatWindow = document.getElementById("chat-window");
+    const chatClose = document.getElementById("chat-close");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+    const chatMessages = document.getElementById("chat-messages");
 
-// =================================================
+    // Open Chat Window
+    if (chatToggle && chatWindow) {
+        chatToggle.addEventListener("click", () => {
+            chatWindow.classList.remove("hidden");
+            chatWindow.classList.add("active");
+            chatToggle.style.transform = "scale(0)"; // Smoothly hide toggle button
+            setTimeout(() => { chatToggle.style.display = "none"; }, 200);
+        });
+    }
+
+    // Close Chat Window
+    if (chatClose && chatWindow) {
+        chatClose.addEventListener("click", () => {
+            chatWindow.classList.remove("active");
+            chatWindow.classList.add("hidden");
+            if (chatToggle) {
+                chatToggle.style.display = "flex";
+                setTimeout(() => { chatToggle.style.transform = "scale(1)"; }, 50);
+            }
+        });
+    }
+
+    // Handle Sending Messages (Simulated Concierge Response)
+    function handleSendMessage() {
+        const messageText = chatInput.value.trim();
+        if (!messageText) return;
+
+        // Append User Message
+        const userMsg = document.createElement("div");
+        userMsg.className = "message outgoing";
+        userMsg.textContent = messageText;
+        chatMessages.appendChild(userMsg);
+        
+        chatInput.value = "";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Simulated Luxury Concierge Response Delay
+        setTimeout(() => {
+            const botMsg = document.createElement("div");
+            botMsg.className = "message incoming";
+            botMsg.textContent = "Thank you for contacting Vogue Avenue. An executive concierge associate is reviewing your inquiry regarding our bespoke collections.";
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    }
+
+    if (chatSend && chatInput) {
+        chatSend.addEventListener("click", handleSendMessage);
+        chatInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") handleSendMessage();
+        });
+    }
+});
+
+
+
+
+// =================Search================================
 document.addEventListener("DOMContentLoaded", () => {
     const searchTrigger = document.getElementById("search-trigger-btn");
     const searchOverlay = document.getElementById("search-overlay");
