@@ -40,9 +40,9 @@
         </div>
     </div>
 
-    <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600') center/cover; padding: 100px 4%; text-align: center; border-bottom: 1px solid var(--border-color);">
+    <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1600') center/cover; padding: 100px 4%; text-align: center; border-bottom: 1px solid var(--border-color);">
         <h1 class="section-title" style="margin: 0; color: #FFF;">Women's Couture</h1>
-        <p style="color: var(--text-muted); letter-spacing: 2px; margin-top: 10px; text-transform: uppercase; font-size: 12px;">Premium Fabrics & Timeless Formals</p>
+        <p style="color: var(--text-muted); letter-spacing: 2px; margin-top: 10px; text-transform: uppercase; font-size: 12px;">Evening Gowns, Tailored Trenches & Luxury Silk</p>
     </section>
 
     <main class="container" style="padding: 60px 4%;">
@@ -134,6 +134,22 @@
         </div>
     </footer>
 
-       <script src="app.js"></script>
+    <div id="product-modal" class="product-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn" aria-label="Close overlay">&times;</button>
+            <div class="modal-left" id="modal-product-img-container"></div>
+            <div class="modal-right">
+                <h2 id="modal-product-title"></h2>
+                <p id="modal-product-price"></p>
+                <div class="modal-options-row">
+                    <label for="modal-size-selector">Select Size Layout:</label>
+                    <select id="modal-size-selector" class="luxury-size-selector"></select>
+                </div>
+                <button id="modal-add-to-bag-btn" class="btn-add-cart">Add To Shopping Bag</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
