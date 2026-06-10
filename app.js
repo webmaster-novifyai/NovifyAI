@@ -1,29 +1,33 @@
 // ==========================================================================
-// 1. CORE GLOBAL STATE MANAGEMENT
+// 1. GLOBAL STATE DATA RECORD MANAGEMENT ENGINE
 // ==========================================================================
 window.cart = JSON.parse(localStorage.getItem("vogue_cart")) || [];
 
-// Unified collection data dictionary lookup engine
 const products = [
-    // Men's Collection Data
+    // Men's Tailoring Collection Data
     { id: "m1", title: "Bespoke Navy Tuxedo", price: 1450.00, img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=600", category: "men", sizes: ["48R", "50R", "52R", "54R"] },
     { id: "m2", title: "Classic Charcoal Blazer", price: 890.00, img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600", category: "men", sizes: ["46R", "48R", "50R", "52R"] },
     { id: "m3", title: "Premium Wool Cashmere Coat", price: 1850.00, img: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=600", category: "men", sizes: ["S", "M", "L", "XL"] },
     
-    // Women's Collection Data (Preserving variants for structural alignment)
+    // Women's Couture Collection Data
     { id: "w1", title: "Silk Evening Gown", price: 2100.00, img: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=600", category: "women", sizes: ["XS", "S", "M", "L"] },
     { id: "w2", title: "Classic Tailored Trench", price: 1250.00, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600", category: "women", sizes: ["S", "M", "L"] },
-    { id: "w3", title: "Velvet Cocktail Dress", price: 950.00, img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=600", category: "women", sizes: ["XS", "S", "M"] }
+    { id: "w3", title: "Velvet Cocktail Dress", price: 950.00, img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=600", category: "women", sizes: ["XS", "S", "M"] },
+
+    // Signature Black & Gold Luxury Collection Data
+    { id: "bg1", title: "Midnight Eclipse Onyx Suit", price: 2450.00, img: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?q=80&w=600", category: "luxury", sizes: ["46R", "48R", "50R", "52R", "54R"] },
+    { id: "bg2", title: "Aurum Trim Velvet Blazer", price: 1980.00, img: "https://images.unsplash.com/photo-1548883354-7622d03aca27?q=80&w=600", category: "luxury", sizes: ["S", "M", "L", "XL"] },
+    { id: "bg3", title: "Gilded Baroque Evening Gown", price: 3200.00, img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600", category: "luxury", sizes: ["XS", "S", "M", "L"] }
 ];
 
 // ==========================================================================
-// 2. DATA GRID RENDERING AUTOMATION HOOKS
+// 2. STABILIZED STOREFRONT GRID LAYOUT ROUTER
 // ==========================================================================
 function initializeStorefrontGrids() {
-    // Render dynamic target arrays into pages depending on structural placement
     const menGrid = document.getElementById("men-grid");
     const womenGrid = document.getElementById("women-grid");
-    const indexGrid = document.getElementById("index-grid"); // Fallback check for new arrivals
+    const luxuryGrid = document.getElementById("luxury-grid");
+    const indexGrid = document.getElementById("index-grid"); // Dedicated element lookup node for home screen portal feed
 
     if (menGrid) {
         renderLuxuryGrid(products.filter(p => p.category === "men"), menGrid);
@@ -31,8 +35,12 @@ function initializeStorefrontGrids() {
     if (womenGrid) {
         renderLuxuryGrid(products.filter(p => p.category === "women"), womenGrid);
     }
+    if (luxuryGrid) {
+        renderLuxuryGrid(products.filter(p => p.category === "luxury"), luxuryGrid);
+    }
     if (indexGrid) {
-        renderLuxuryGrid(products, indexGrid); // Shows all variations sequentially on home page
+        // Direct complete array routing mapping for all items sequentially on home screen feed
+        renderLuxuryGrid(products, indexGrid);
     }
 }
 
@@ -66,7 +74,6 @@ function renderLuxuryGrid(itemsList, targetContainer) {
             </div>
         `;
         
-        // Manual override hooks to clear out CSS flickering events
         const imgContainer = card.querySelector(".image-container");
         const overlay = card.querySelector(".quick-view-overlay");
         if (imgContainer && overlay) {
@@ -79,7 +86,7 @@ function renderLuxuryGrid(itemsList, targetContainer) {
 }
 
 // ==========================================================================
-// 3. QUICK VIEW CONTROLLER LAYER
+// 3. CENTERING DYNAMIC QUICK-VIEW LAYER INTERFACES
 // ==========================================================================
 window.openProductModal = function(productId) {
     const product = products.find(p => p.id === productId);
@@ -113,7 +120,7 @@ window.closeProductModal = function() {
 };
 
 // ==========================================================================
-// 4. BUSINESS LOGIC ENGINE: CENTRAL CART PIPELINE
+// 4. PIPELINE CART BUSINESS CORE LOGIC UTILITIES
 // ==========================================================================
 window.processAddToBag = function(productId) {
     const item = products.find(p => p.id === productId);
@@ -155,7 +162,6 @@ function executeCoreCartPush(item, chosenSize) {
     localStorage.setItem("vogue_cart", JSON.stringify(window.cart));
     refreshCartUI();
     
-    // Slid open side drawer automatically
     const cartDrawer = document.getElementById("cart-drawer");
     if (cartDrawer) cartDrawer.classList.add("active");
 }
@@ -205,13 +211,12 @@ window.removeItemFromCart = function(index) {
 };
 
 // ==========================================================================
-// 5. DOM COMPONENT INTERFACES LIFECYCLE ROUTINES
+// 5. GLOBAL INTERACTIVE EVENTS SUBSCRIPTIONS RE-MAPPING
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
     initializeStorefrontGrids();
     refreshCartUI();
 
-    // Shopping Side Drawer Event Bindings
     const cartTrigger = document.getElementById("cart-trigger");
     const cartCloseBtn = document.getElementById("cart-close-btn");
     const cartDrawer = document.getElementById("cart-drawer");
@@ -226,7 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
         cartCloseBtn.addEventListener("click", () => cartDrawer.classList.remove("active"));
     }
 
-    // Modal Close Action Register
     const modalCloseBtn = document.getElementById("modal-close-btn");
     const productModal = document.getElementById("product-modal");
 
@@ -237,20 +241,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==========================================================================
-    // ADDITIONAL COMPONENT BACKWARDS COMPATIBILITY (SEARCH & CHAT LAYOUTS)
-    // ==========================================================================
+    // Site Input Query Search Triggers Configuration
     const searchTrigger = document.getElementById("search-trigger-btn");
     const searchClose = document.getElementById("search-close");
     const searchOverlay = document.getElementById("search-overlay");
+    const searchInput = document.getElementById("search-input");
+    const searchResultsGrid = document.getElementById("search-results-grid");
 
     if (searchTrigger && searchOverlay) {
-        searchTrigger.addEventListener("click", () => searchOverlay.classList.add("active"));
+        searchTrigger.addEventListener("click", () => {
+            searchOverlay.classList.add("active");
+            if (searchInput) searchInput.focus();
+        });
     }
     if (searchClose && searchOverlay) {
         searchClose.addEventListener("click", () => searchOverlay.classList.remove("active"));
     }
 
+    // Dynamic Live Local Keyword Client-Side Filtering Engine Lookup Subroutine
+    if (searchInput && searchResultsGrid) {
+        searchInput.addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (query.length < 2) {
+                searchResultsGrid.innerHTML = "";
+                return;
+            }
+            const matchingProducts = products.filter(p => 
+                p.title.toLowerCase().includes(query) || 
+                p.category.toLowerCase().includes(query)
+            );
+            renderLuxuryGrid(matchingProducts, searchResultsGrid);
+        });
+    }
+
+    // Concierge Chat Event Listeners Bindings
     const chatToggle = document.getElementById("chat-toggle");
     const chatCloseX = document.getElementById("chat-close");
     const chatWindow = document.getElementById("chat-window");
