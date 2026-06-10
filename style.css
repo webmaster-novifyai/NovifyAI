@@ -33,7 +33,6 @@ a {
     transition: color 0.3s ease;
 }
 
-/* Base structural layout width container */
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -99,7 +98,6 @@ a {
     color: var(--gold-primary);
 }
 
-/* Subtle accent line below active/hovered navigation pages */
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -144,7 +142,7 @@ a {
 }
 
 /* ==========================================================================
-   3. HERO BANNER & TEXT PRESENTATION IMAGES
+   3. HERO BANNER PLACEMENT DESIGN SETTINGS
    ========================================================================== */
 .category-hero {
     border-bottom: 1px solid var(--border-color);
@@ -158,7 +156,7 @@ a {
 }
 
 /* ==========================================================================
-   4. EDITORIAL PRODUCTS GRID & INTERFACE CARDS
+   4. EDITORIAL CARDS PRODUCT EXPLOITATION GRID
    ========================================================================== */
 .products-grid {
     display: grid;
@@ -215,7 +213,6 @@ a {
     letter-spacing: 0.5px;
 }
 
-/* Luxury Form Options Elements */
 .product-options-wrapper {
     display: flex;
     flex-direction: column;
@@ -247,7 +244,6 @@ a {
     border-color: var(--gold-primary);
 }
 
-/* Premium Primary Call to Action Button */
 .btn-add-cart {
     background-color: transparent;
     color: var(--text-light);
@@ -269,7 +265,7 @@ a {
 }
 
 /* ==========================================================================
-   5. SLIDE-OUT SHOPPING BAG DRAWER PANEL
+   5. SLIDE-OUT SHOPPING DRAWERS ARCHITECTURE
    ========================================================================== */
 .cart-drawer {
     position: fixed;
@@ -372,7 +368,7 @@ a {
 }
 
 /* ==========================================================================
-   6. FULL SCREEN OVERLAY SITE SEARCH BAR SYSTEM
+   6. FULL SCREEN LIVE VIEW MODAL INTERACTIVES
    ========================================================================== */
 .search-overlay {
     position: fixed;
@@ -435,7 +431,7 @@ a {
 }
 
 /* ==========================================================================
-   7. FLOATING CONCIERGE CHAT INTERACTION INTERFACE
+   7. FLOATING CONCIERGE CHAT COMPONENT DESIGNS
    ========================================================================== */
 .ai-chat-widget {
     position: fixed;
@@ -622,7 +618,7 @@ a {
 }
 
 /* ==========================================================================
-   8. FOOTER WORKSPACE GRID BRAND LABELS
+   8. FOOTER WORKSPACE GRID HOOKS
    ========================================================================== */
 .site-footer {
     background-color: var(--bg-secondary);
@@ -715,7 +711,7 @@ a {
 }
 
 /* ==========================================================================
-   9. PREMIUM LUXURY QUICK-VIEW MODAL WINDOW (CENTRAL ELEMENT FIX)
+   9. FIXED SCREEN-CENTERED DYNAMIC PRODUCT MODAL
    ========================================================================== */
 .product-modal {
     position: fixed !important;
@@ -727,28 +723,24 @@ a {
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
     
-    /* Central Grid Matrix Placement */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     
-    z-index: 99999 !important; /* Forces layout positioning above chats and carts */
+    z-index: 99999 !important;
     
-    /* RECOVERY STATE CORRECTION: HIDDEN UNTIL INVOKED BY CLASS */
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
     transition: opacity 0.3s ease, visibility 0.3s ease !important;
 }
 
-/* Trigger state added via app.js click events */
 .product-modal.active {
     opacity: 1 !important;
     pointer-events: auto !important;
     visibility: visible !important;
 }
 
-/* Content Panel Shell Base */
 .modal-content {
     background-color: #0c0c0c !important;
     border: 1px solid var(--gold-primary, #d4af37) !important;
@@ -756,9 +748,8 @@ a {
     max-width: 750px !important;
     width: 90% !important;
     position: relative !important;
-    margin: auto !important; /* Guarantees layout centering constraint pull */
+    margin: auto !important; 
     
-    /* Grid split alignment layout settings */
     display: flex !important;
     flex-direction: row !important;
     gap: 35px !important;
@@ -867,7 +858,6 @@ a {
 }
 
 @media (max-width: 768px) {
-    /* Main Navigation Responsive Refactoring */
     .main-header {
         flex-direction: column;
         gap: 15px;
@@ -881,7 +871,6 @@ a {
         width: 100%;
     }
     
-    /* Editorial Product Card Grids: Crisp 2-column mobile presentation format */
     .products-grid {
         grid-template-columns: repeat(2, 1fr) !important; 
         gap: 15px 10px;
@@ -895,18 +884,16 @@ a {
         overflow: hidden;
     }
     
-    /* Cart Side Drawer full screen scale adjustments */
     .cart-drawer {
         width: 100% !important;
         right: -100%;
     }
     
-    /* Quick View Window Centered Responsive Refactoring Layout Blocks */
     .modal-content {
         flex-direction: column !important;
         padding: 25px 20px !important;
         max-height: 85vh !important;
-        overflow-y: auto !important; /* Enables interior scrolling on short phone viewports */
+        overflow-y: auto !important; 
         gap: 15px !important;
     }
     .modal-left {
@@ -923,7 +910,6 @@ a {
         align-items: center !important;
     }
     
-    /* Footer layout stacked column restructuring */
     .footer-container {
         flex-direction: column;
         text-align: center;
