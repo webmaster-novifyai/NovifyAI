@@ -231,9 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshCartUI();
 });
 
-// ==========================================
-// 4. GLOBAL INTERACTIVE RENDER CONTEXTS
-// ==========================================
+// ==========================================================================
+// REVISED DYNAMIC RENDERING FRAMEWORK (WITH QUICK-VIEW HOOKS)
+// ==========================================================================
 function renderLuxuryGrid(itemsList, targetContainer) {
     if (!targetContainer) return;
     targetContainer.innerHTML = "";
@@ -249,12 +249,16 @@ function renderLuxuryGrid(itemsList, targetContainer) {
         
         let sizeOptionsHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join("");
 
+        // Added onclick engine directly to the image layout workspace wrapper
         card.innerHTML = `
-            <div class="image-container">
+            <div class="image-container" onclick="openProductModal('${product.id}')" style="cursor: pointer; position: relative; width:100%;">
                 <img src="${product.img}" alt="${product.title}" class="product-image" loading="lazy">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+                    <span style="color: #fff; border: 1px solid #fff; padding: 10px 15px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; background: rgba(0,0,0,0.6);">Quick View</span>
+                </div>
             </div>
             <div class="product-info">
-                <h3 class="product-title">${product.title}</h3>
+                <h3 class="product-title" onclick="openProductModal('${product.id}')" style="cursor: pointer;">${product.title}</h3>
                 <p class="product-price">$${product.price.toFixed(2)}</p>
                 
                 <div class="product-options-wrapper">
@@ -270,6 +274,106 @@ function renderLuxuryGrid(itemsList, targetContainer) {
         targetContainer.appendChild(card);
     });
 }
+
+// ==========================================================================
+// INTERACTIVE OVERLAY WINDOW MODAL DISPATCH MECHANISM
+// ==========================================================================
+window.openProductModal = function(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Build sub elements parameters safely
+    document.getElementById("modal-product-img-container").innerHTML = `<img src="${product.img}" alt="${product.title}">`;
+    document.getElementById("modal-product-title").textContent = product.title;
+    document.getElementById("modal-product-price").textContent = `$${product.price.toFixed(2)}`;
+
+    // Generate option elements array string layout 
+    const sizeSelector = document.getElementById("modal-size-selector");
+    if (sizeSelector) {
+        sizeSelector.innerHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join("");
+    }
+
+    // Set dynamic operational routing command execution to the action button node
+    const addToBagBtn = document.getElementById("modal-add-to-bag-btn");
+    if (addToBagBtn) {
+        addToBagBtn.setAttribute("onclick", `processAddToBagFromModal('${product.id}')`);
+    }
+
+    // Display Window overlay
+    const modal = document.getElementById("product-modal");
+    if (modal) modal.classList.add("active");
+};
+
+window.closeProductModal = function() {
+    const modal = document.getElementById("product-modal");
+    if (modal) modal.classList.remove("active");
+};
+
+// Handle addition dispatch sequence originating explicitly inside popover elements 
+window.processAddToBagFromModal = function(productId) {
+    const item = products.find(p => p.id === productId);
+    if (!item) return;
+
+    const sizeSelector = document.getElementById("modal-size-selector");
+    const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
+
+    executeCoreCartPush(item, chosenSize);
+    window.closeProductModal();
+};
+
+// Extracted internal pushing framework to isolate routine code lines logic safely
+window.processAddToBag = function(productId) {
+    const item = products.find(p => p.id === productId);
+    if (!item) return;
+
+    const sizeSelector = document.getElementById(`size-${productId}`);
+    const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
+
+    executeCoreCartPush(item, chosenSize);
+};
+
+function executeCoreCartPush(item, chosenSize) {
+    const existingItem = cart.find(i => i.id === item.id && i.size === chosenSize);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            img: item.img,
+            size: chosenSize,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("vogue_cart", JSON.stringify(cart));
+    refreshCartUI();
+    
+    const cartDrawer = document.getElementById("cart-drawer");
+    if (cartDrawer) cartDrawer.classList.add("active");
+}
+
+// Append Event Listeners internally to DOMContentLoaded section array area
+document.addEventListener("DOMContentLoaded", () => {
+    // ... Keep all your existing structural interface code block elements from previous steps here ...
+
+    // Modal Close Trigger Actions hookup setup lines 
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+    const productModal = document.getElementById("product-modal");
+
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener("click", window.closeProductModal);
+    }
+    if (productModal) {
+        productModal.addEventListener("click", (e) => {
+            if (e.target === productModal) window.closeProductModal();
+        });
+    }
+});
+
+
+
 
 // Global Core Adding Handler
 window.processAddToBag = function(productId) {
