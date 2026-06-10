@@ -309,7 +309,19 @@ window.closeProductModal = function() {
     if (modal) modal.classList.remove("active");
 };
 
-// Handle addition dispatch sequence originating explicitly inside popover elements 
+// Handles adding directly from the main grid cards
+window.processAddToBag = function(productId) {
+    const item = products.find(p => p.id === productId);
+    if (!item) return;
+
+    const sizeSelector = document.getElementById(`size-${productId}`);
+    const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
+
+    // This pushes data silently to the cart array
+    executeCoreCartPush(item, chosenSize);
+};
+
+// Handles adding from inside the Quick View modal window
 window.processAddToBagFromModal = function(productId) {
     const item = products.find(p => p.id === productId);
     if (!item) return;
@@ -318,20 +330,8 @@ window.processAddToBagFromModal = function(productId) {
     const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
 
     executeCoreCartPush(item, chosenSize);
-    window.closeProductModal();
+    window.closeProductModal(); // Closes the quick-view window automatically
 };
-
-// Extracted internal pushing framework to isolate routine code lines logic safely
-window.processAddToBag = function(productId) {
-    const item = products.find(p => p.id === productId);
-    if (!item) return;
-
-    const sizeSelector = document.getElementById(`size-${productId}`);
-    const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
-
-    executeCoreCartPush(item, chosenSize);
-};
-
 function executeCoreCartPush(item, chosenSize) {
     const existingItem = cart.find(i => i.id === item.id && i.size === chosenSize);
     if (existingItem) {
@@ -347,11 +347,15 @@ function executeCoreCartPush(item, chosenSize) {
         });
     }
 
+    // Save configuration persistently
     localStorage.setItem("vogue_cart", JSON.stringify(cart));
     refreshCartUI();
     
+    // Smooth alternative: Slide open the elegant cart drawer instantly
     const cartDrawer = document.getElementById("cart-drawer");
-    if (cartDrawer) cartDrawer.classList.add("active");
+    if (cartDrawer) {
+        cartDrawer.classList.add("active");
+    }
 }
 
 // Append Event Listeners internally to DOMContentLoaded section array area
