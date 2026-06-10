@@ -72,6 +72,81 @@ document.addEventListener('DOMContentLoaded', () => {
     initAIChatbot();
 });
 
+// =================================================
+document.addEventListener("DOMContentLoaded", () => {
+    const searchTrigger = document.getElementById("search-trigger-btn");
+    const searchOverlay = document.getElementById("search-overlay");
+    const searchClose = document.getElementById("search-close");
+    const searchInput = document.getElementById("search-input");
+    const searchResultsGrid = document.getElementById("search-results-grid");
+
+    // Open Search UI
+    if (searchTrigger) {
+        searchTrigger.addEventListener("click", () => {
+            searchOverlay.classList.add("active");
+            document.body.style.overflow = "hidden"; // Prevent background scrolling
+            setTimeout(() => searchInput.focus(), 100);
+        });
+    }
+
+    // Close Search UI
+    if (searchClose) {
+        searchClose.addEventListener("click", () => {
+            searchOverlay.classList.remove("active");
+            document.body.style.overflow = "auto";
+            searchInput.value = "";
+            searchResultsGrid.innerHTML = "";
+        });
+    }
+
+    // Live Evaluation Match Filter Engine
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            searchResultsGrid.innerHTML = "";
+
+            if (query.length < 2) return;
+
+            // Filter standard global product catalog structure array
+            const matchedProducts = products.filter(product => 
+                product.title.toLowerCase().includes(query) || 
+                product.category.toLowerCase().includes(query)
+            );
+
+            if (matchedProducts.length === 0) {
+                searchResultsGrid.innerHTML = `<p class="empty-message">No couture matches found for "${e.target.value}".</p>`;
+                return;
+            }
+
+            // Render matched results using identical structural cards matching catalog display
+            matchedProducts.forEach(product => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <div class="image-container">
+                        <img src="${product.img}" alt="${product.title}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-price">$${product.price.toFixed(2)}</p>
+                        <button class="btn-add-cart" onclick="openProductModal('${product.id}')">View Options</button>
+                    </div>
+                `;
+                searchResultsGrid.appendChild(card);
+            });
+        });
+    }
+});
+
+
+
+
+// ==================================================
+
+
+
+
+
 // ==========================================
 // 3. CATALOG RENDERING ENGINE
 // ==========================================
