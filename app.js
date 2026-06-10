@@ -53,6 +53,84 @@ const colorPalette = [
 
 const standardSizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
 
+// --- AI Chatbot Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const chatToggleBtn = document.getElementById('chat-toggle-btn-floating');
+    const chatWindow = document.getElementById('chat-window');
+    const chatCloseX = document.getElementById('chat-close-x');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+
+    // Toggle Chat Window Visibility
+    chatToggleBtn.addEventListener('click', () => {
+        chatWindow.classList.toggle('hidden');
+        if (!chatWindow.classList.contains('hidden')) {
+            chatInput.focus();
+        }
+    });
+
+    chatCloseX.addEventListener('click', () => {
+        chatWindow.classList.add('hidden');
+    });
+
+    // Handle Message Submissions
+    function handleSendMessage() {
+        const messageText = chatInput.value.trim();
+        if (messageText === '') return;
+
+        // Render user message
+        appendMessage(messageText, 'outgoing');
+        chatInput.value = '';
+
+        // Trigger simulated premium assistant reply
+        setTimeout(() => {
+            simulateAIResponse(messageText);
+        }, 800);
+    }
+
+    function appendMessage(text, direction) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', direction);
+        
+        const textPara = document.createElement('p');
+        textPara.textContent = text;
+        
+        messageDiv.appendChild(textPara);
+        chatMessages.appendChild(messageDiv);
+        
+        // Auto Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function simulateAIResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        let reply = "Thank you for reaching out to the ATELIER support team. An agent will verify your request regarding our bespoke items shortly.";
+
+        if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
+            reply = "We offer complimentary express worldwide shipping on all seasonal collections. Domestic orders arrive within 2-3 business days, while international shipping typically takes 5-7 business days.";
+        } else if (lowerMessage.includes('men') || lowerMessage.includes('suit')) {
+            reply = "Our Men's Collection features luxury silhouettes made from premium wool blend fabrics with gold hardware details. You can explore the full range directly via the 'Shop Men' button.";
+        } else if (lowerMessage.includes('women') || lowerMessage.includes('blazer')) {
+            reply = "The Women's Collection balances structured tailoring with modern sophistication. Feel free to view our featured jackets and tuxedos directly in the Women's section.";
+        } else if (lowerMessage.includes('size') || lowerMessage.includes('fit')) {
+            reply = "Our garments are tailored to a modern slim fit. We highly recommend viewing our specific sizing matrix on each product detail view for precise chest and waist parameters.";
+        }
+
+        appendMessage(reply, 'incoming');
+    }
+
+    // Event Listeners for Input
+    chatSendBtn.addEventListener('click', handleSendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
+    });
+});
+
+
+
 // Shopping Cart Application State
 let cart = [];
 let selectedProductModal = null;
@@ -61,205 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     initCartEventHandlers();
 });
-
-/* --- AI Chatbot Widget --- */
-.ai-chat-widget {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 2000;
-    font-family: inherit;
-}
-
-/* Floating Toggle Button */
-.chat-toggle-btn-floating {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #000000;
-    color: #D4AF37; /* Gold accent */
-    border: 1px solid #D4AF37;
-    padding: 12px 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.chat-toggle-btn-floating:hover {
-    background-color: #D4AF37;
-    color: #000000;
-    transform: translateY(-2px);
-}
-
-/* Chat Window Box */
-.chat-window {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    width: 360px;
-    height: 500px;
-    background-color: #111111;
-    border: 1px solid #222222;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.chat-window.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(20px);
-}
-
-/* Chat Header */
-.chat-header {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #000000;
-    border-bottom: 1px solid #222222;
-}
-
-.chat-avatar {
-    width: 35px;
-    height: 35px;
-    background-color: #222222;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #D4AF37;
-    margin-right: 12px;
-}
-
-.chat-status-info h4 {
-    color: #ffffff;
-    margin: 0;
-    font-size: 15px;
-    letter-spacing: 0.5px;
-}
-
-.chat-status-info p {
-    color: #888888;
-    margin: 2px 0 0 0;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-    background-color: #00ff66;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.chat-close-x {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 24px;
-    cursor: pointer;
-    margin-left: auto;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
-
-.chat-close-x:hover {
-    opacity: 1;
-    color: #D4AF37;
-}
-
-/* Chat Body / Messages Area */
-.chat-messages {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background-color: #111111;
-}
-
-.chat-messages::-webkit-scrollbar {
-    width: 4px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-    background-color: #222222;
-}
-
-.message {
-    max-width: 80%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.message.incoming {
-    background-color: #222222;
-    color: #dddddd;
-    align-self: flex-start;
-    border-bottom-left-radius: 2px;
-}
-
-.message.outgoing {
-    background-color: #D4AF37;
-    color: #000000;
-    align-self: flex-end;
-    border-bottom-right-radius: 2px;
-    font-weight: 500;
-}
-
-/* Chat Input Footer */
-.chat-input-area {
-    display: flex;
-    padding: 15px;
-    background-color: #000000;
-    border-top: 1px solid #222222;
-    gap: 10px;
-}
-
-.chat-input-area input {
-    flex: 1;
-    background-color: #111111;
-    border: 1px solid #333333;
-    color: #ffffff;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 13px;
-    outline: none;
-}
-
-.chat-input-area input:focus {
-    border-color: #D4AF37;
-}
-
-.chat-input-area button {
-    background: none;
-    border: none;
-    color: #D4AF37;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 0 10px;
-    transition: transform 0.2s;
-}
-
-.chat-input-area button:hover {
-    transform: scale(1.1);
-}
-
 
 // --- Catalog Rendering Engine ---
 function renderProducts() {
