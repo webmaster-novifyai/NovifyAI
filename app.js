@@ -1,4 +1,8 @@
-// --- Data Source: Luxury Inventory with Extended Color Palette ---
+// ==========================================
+// 1. DATA SOURCES & GLOBAL STATE
+// ==========================================
+
+// Luxury Inventory with Extended Color Palette
 const products = [
     // Women's Collection (10 Products)
     { id: 'w1', category: 'women', title: 'Velvet Embroidered Luxury Suit', price: 245.00, img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop' },
@@ -53,97 +57,27 @@ const colorPalette = [
 
 const standardSizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
 
-// --- AI Chatbot Logic ---
-document.addEventListener('DOMContentLoaded', () => {
-    const chatToggleBtn = document.getElementById('chat-toggle-btn-floating');
-    const chatWindow = document.getElementById('chat-window');
-    const chatCloseX = document.getElementById('chat-close-x');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-    const chatMessages = document.getElementById('chat-messages');
-
-    // Toggle Chat Window Visibility
-    chatToggleBtn.addEventListener('click', () => {
-        chatWindow.classList.toggle('hidden');
-        if (!chatWindow.classList.contains('hidden')) {
-            chatInput.focus();
-        }
-    });
-
-    chatCloseX.addEventListener('click', () => {
-        chatWindow.classList.add('hidden');
-    });
-
-    // Handle Message Submissions
-    function handleSendMessage() {
-        const messageText = chatInput.value.trim();
-        if (messageText === '') return;
-
-        // Render user message
-        appendMessage(messageText, 'outgoing');
-        chatInput.value = '';
-
-        // Trigger simulated premium assistant reply
-        setTimeout(() => {
-            simulateAIResponse(messageText);
-        }, 800);
-    }
-
-    function appendMessage(text, direction) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', direction);
-        
-        const textPara = document.createElement('p');
-        textPara.textContent = text;
-        
-        messageDiv.appendChild(textPara);
-        chatMessages.appendChild(messageDiv);
-        
-        // Auto Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function simulateAIResponse(userMessage) {
-        const lowerMessage = userMessage.toLowerCase();
-        let reply = "Thank you for reaching out to the ATELIER support team. An agent will verify your request regarding our bespoke items shortly.";
-
-        if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
-            reply = "We offer complimentary express worldwide shipping on all seasonal collections. Domestic orders arrive within 2-3 business days, while international shipping typically takes 5-7 business days.";
-        } else if (lowerMessage.includes('men') || lowerMessage.includes('suit')) {
-            reply = "Our Men's Collection features luxury silhouettes made from premium wool blend fabrics with gold hardware details. You can explore the full range directly via the 'Shop Men' button.";
-        } else if (lowerMessage.includes('women') || lowerMessage.includes('blazer')) {
-            reply = "The Women's Collection balances structured tailoring with modern sophistication. Feel free to view our featured jackets and tuxedos directly in the Women's section.";
-        } else if (lowerMessage.includes('size') || lowerMessage.includes('fit')) {
-            reply = "Our garments are tailored to a modern slim fit. We highly recommend viewing our specific sizing matrix on each product detail view for precise chest and waist parameters.";
-        }
-
-        appendMessage(reply, 'incoming');
-    }
-
-    // Event Listeners for Input
-    chatSendBtn.addEventListener('click', handleSendMessage);
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleSendMessage();
-        }
-    });
-});
-
-
-
-// Shopping Cart Application State
+// Shopping Cart & Modal Application State
 let cart = [];
 let selectedProductModal = null;
 
+// ==========================================
+// 2. MASTER APP INITIALIZATION
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     initCartEventHandlers();
+    initAIChatbot();
 });
 
-// --- Catalog Rendering Engine ---
+// ==========================================
+// 3. CATALOG RENDERING ENGINE
+// ==========================================
 function renderProducts() {
     const womenGrid = document.getElementById('women-grid');
     const menGrid = document.getElementById('men-grid');
+
+    if (!womenGrid || !menGrid) return;
 
     womenGrid.innerHTML = '';
     menGrid.innerHTML = '';
@@ -170,9 +104,12 @@ function renderProducts() {
     });
 }
 
-// --- Product Selection Modal ---
+// ==========================================
+// 4. PRODUCT SELECTION MODAL (POP-UP)
+// ==========================================
 function openProductModal(productId) {
     const product = products.find(p => p.id === productId);
+    if (!product) return;
     
     // Build Swatches HTML
     let swatchesHTML = '';
@@ -227,17 +164,10 @@ function openProductModal(productId) {
         </div>
     `;
 
-    // Remove existing modal if any
-    const existingModal = document.getElementById('product-modal');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    const existingOverlay = document.getElementById('product-modal-overlay');
-    if (existingOverlay) {
-        existingOverlay.remove();
-    }
+    // Safe clear of existing elements
+    closeProductModal();
 
-    // Insert modal
+    // Insert new modal elements
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     selectedProductModal = productId;
 }
@@ -259,17 +189,16 @@ function selectModalColor(swatchElement) {
 
 function addToCartFromModal(productId) {
     const product = products.find(p => p.id === productId);
+    if (!product) return;
     
-    // Get selected color and size from modal
     const modal = document.getElementById('product-modal');
     const activeSwatch = modal.querySelector('.swatch.active');
+    
     const selectedColor = activeSwatch ? activeSwatch.getAttribute('data-color') : 'Midnight Black';
     const selectedColorHex = activeSwatch ? activeSwatch.style.backgroundColor : '#111111';
     const selectedSize = modal.querySelector('#modal-size').value;
 
-    // Create unique variant identifier
     const variantCartId = `${productId}-${selectedColor}-${selectedSize}`;
-    
     const existingItem = cart.find(item => item.variantCartId === variantCartId);
 
     if (existingItem) {
@@ -288,30 +217,35 @@ function addToCartFromModal(productId) {
     updateCartUI();
     closeProductModal();
     
-    // Open cart drawer
-    document.getElementById('cart-drawer').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('visible');
+    // Auto open side cart drawer panel
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartOverlay = document.getElementById('cart-overlay');
+    if (cartDrawer) cartDrawer.classList.add('open');
+    if (cartOverlay) cartOverlay.classList.add('visible');
 }
 
-// --- Cart Handlers & Processing ---
+// ==========================================
+// 5. SHOPPING CART CORE HANDLERS
+// ==========================================
 function initCartEventHandlers() {
     const cartToggle = document.getElementById('cart-toggle-btn');
     const cartClose = document.getElementById('cart-close-btn');
     const cartDrawer = document.getElementById('cart-drawer');
     const cartOverlay = document.getElementById('cart-overlay');
 
-    const openCart = () => {
+    if (!cartToggle || !cartDrawer || !cartOverlay) return;
+
+    cartToggle.addEventListener('click', () => {
         cartDrawer.classList.add('open');
         cartOverlay.classList.add('visible');
-    };
+    });
 
     const closeCart = () => {
         cartDrawer.classList.remove('open');
         cartOverlay.classList.remove('visible');
     };
 
-    cartToggle.addEventListener('click', openCart);
-    cartClose.addEventListener('click', closeCart);
+    if (cartClose) cartClose.addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
 }
 
@@ -324,6 +258,8 @@ function updateCartUI() {
     const cartContainer = document.getElementById('cart-items-container');
     const cartCount = document.getElementById('cart-count');
     const cartSubtotal = document.getElementById('cart-subtotal');
+    
+    if (!cartContainer || !cartCount || !cartSubtotal) return;
     
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -354,4 +290,89 @@ function updateCartUI() {
             </div>
         `;
     });
+}
+
+// ==========================================
+// 6. PREMIUM AI CONCIERGE ENGINE
+// ==========================================
+function initAIChatbot() {
+    const chatToggleBtn = document.getElementById('chat-toggle-btn-floating');
+    const chatWindow = document.getElementById('chat-window');
+    const chatCloseX = document.getElementById('chat-close-x');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+
+    if (!chatToggleBtn || !chatWindow) return;
+
+    // Visibility Toggles
+    chatToggleBtn.addEventListener('click', () => {
+        chatWindow.classList.toggle('hidden');
+        if (!chatWindow.classList.contains('hidden') && chatInput) {
+            chatInput.focus();
+        }
+    });
+
+    if (chatCloseX) {
+        chatCloseX.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+        });
+    }
+
+    // Message processing pipelines
+    function handleSendMessage() {
+        if (!chatInput) return;
+        const messageText = chatInput.value.trim();
+        if (messageText === '') return;
+
+        appendMessage(messageText, 'outgoing');
+        chatInput.value = '';
+
+        setTimeout(() => {
+            simulateAIResponse(messageText);
+        }, 800);
+    }
+
+    function appendMessage(text, direction) {
+        if (!chatMessages) return;
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', direction);
+        
+        const textPara = document.createElement('p');
+        textPara.textContent = text;
+        
+        messageDiv.appendChild(textPara);
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function simulateAIResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        let reply = "Thank you for contacting the ATELIER Digital Concierge. A styling specialist will verify your request shortly.";
+
+        if (lowerMessage.includes('shipping') || lowerMessage.includes('delivery')) {
+            reply = "We offer complimentary express worldwide shipping on all orders. Domestic shipments take 2-3 business days, while international shipping safely arrives within 5-7 business days.";
+        } 
+        else if (lowerMessage.includes('men') || (lowerMessage.includes('suit') && !lowerMessage.includes('women'))) {
+            const menItems = products.filter(p => p.category === 'men').slice(0, 2);
+            reply = `Our Men's Collection features luxury tailored pieces like the "${menItems[0].title}" ($${menItems[0].price}) and the "${menItems[1].title}" ($${menItems[1].price}). You can explore the full range directly via the 'Shop Men' button.`;
+        } 
+        else if (lowerMessage.includes('women') || lowerMessage.includes('blazer') || lowerMessage.includes('anarkali')) {
+            const womenItems = products.filter(p => p.category === 'women').slice(0, 2);
+            reply = `The Women's Collection balances premium luxury fabrics with exquisite modern structure. Exceptional examples include our "${womenItems[0].title}" ($${womenItems[0].price}) and the elegant "${womenItems[1].title}" ($${womenItems[1].price}).`;
+        } 
+        else if (lowerMessage.includes('size') || lowerMessage.includes('fit')) {
+            reply = "ATELIER garments are curated to a bespoke slim, elegant fit. When choosing an item, click 'Select Options' to view available metrics from Small up to XXL.";
+        }
+
+        appendMessage(reply, 'incoming');
+    }
+
+    // Assign Input Listeners
+    if (chatSendBtn) chatSendBtn.addEventListener('click', handleSendMessage);
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSendMessage();
+        });
+    }
 }
