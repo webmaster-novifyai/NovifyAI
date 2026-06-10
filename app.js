@@ -1,5 +1,5 @@
 // ==========================================
-// 1. VOGUE AVENUE MASTER CATALOG DATA
+// 1. MASTER CATALOG DATA Matrix
 // ==========================================
 const products = [
     // --- Women's Couture Collection ---
@@ -71,28 +71,171 @@ const products = [
     }
 ];
 
+// Persistent LocalStorage Cart Sync Engine
+let cart = JSON.parse(localStorage.getItem("vogue_cart")) || [];
+
 // ==========================================
-// 2. DYNAMIC RENDERING FRAMEWORK
+// 2. DEFENSIVE GLOBAL INITIALIZATION DOM LINK
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
+    
+    // --- Cart Drawer Interface Bindings ---
+    const cartTrigger = document.getElementById("cart-trigger");
+    const cartDrawer = document.getElementById("cart-drawer");
+    const cartCloseBtn = document.getElementById("cart-close-btn");
+
+    if (cartTrigger && cartDrawer) {
+        cartTrigger.addEventListener("click", () => cartDrawer.classList.add("active"));
+    }
+    if (cartCloseBtn && cartDrawer) {
+        cartCloseBtn.addEventListener("click", () => cartDrawer.classList.remove("active"));
+    }
+
+    // --- Search Overlay Fullscreen Bindings ---
+    const searchTrigger = document.getElementById("search-trigger-btn");
+    const searchOverlay = document.getElementById("search-overlay");
+    const searchClose = document.getElementById("search-close");
+    const searchInput = document.getElementById("search-input");
+    const searchResultsGrid = document.getElementById("search-results-grid");
+
+    if (searchTrigger && searchOverlay) {
+        searchTrigger.addEventListener("click", () => {
+            searchOverlay.classList.add("active");
+            if (searchInput) searchInput.focus();
+        });
+    }
+    if (searchClose && searchOverlay) {
+        searchClose.addEventListener("click", () => {
+            searchOverlay.classList.remove("active");
+            if (searchInput) searchInput.value = "";
+            if (searchResultsGrid) searchResultsGrid.innerHTML = "";
+        });
+    }
+
+    if (searchInput && searchResultsGrid) {
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.toLowerCase().trim();
+            if (!query) {
+                searchResultsGrid.innerHTML = "";
+                return;
+            }
+            const filtered = products.filter(p => p.title.toLowerCase().includes(query));
+            renderLuxuryGrid(filtered, searchResultsGrid);
+        });
+    }
+
+    // --- AI Chatbot Concierge Intent Routing ---
+    const chatToggle = document.getElementById("chat-toggle");
+    const chatWindow = document.getElementById("chat-window");
+    const chatClose = document.getElementById("chat-close");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+    const chatMessages = document.getElementById("chat-messages");
+
+    if (chatToggle && chatWindow) {
+        chatToggle.addEventListener("click", () => {
+            chatWindow.classList.remove("hidden");
+            chatWindow.classList.add("active");
+            chatToggle.style.transform = "scale(0)"; 
+            setTimeout(() => { chatToggle.style.display = "none"; }, 200);
+        });
+    }
+
+    if (chatClose && chatWindow) {
+        chatClose.addEventListener("click", () => {
+            chatWindow.classList.remove("active");
+            chatWindow.classList.add("hidden");
+            if (chatToggle) {
+                chatToggle.style.display = "flex";
+                setTimeout(() => { chatToggle.style.transform = "scale(1)"; }, 50);
+            }
+        });
+    }
+
+    function appendChatMessage(htmlContent, direction) {
+        if (!chatMessages) return;
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${direction}`;
+        msgDiv.innerHTML = htmlContent;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function processConciergeQuery() {
+        if (!chatInput) return;
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+
+        appendChatMessage(userText, "outgoing");
+        chatInput.value = "";
+
+        const query = userText.toLowerCase();
+        let conciergeResponse = "";
+
+        const coreKeywords = ["suit", "dress", "tuxedo", "size", "chart", "fit", "measure", "return", "refund", "policy", "shipping", "delivery", "men", "women", "couture", "tailoring", "price", "cost", "buy", "order", "fabric", "vogue"];
+        const isQueryValid = coreKeywords.some(keyword => query.includes(keyword));
+
+        if (isQueryValid) {
+            if (query.includes("size") || query.includes("fit") || query.includes("measure")) {
+                conciergeResponse = "You can review our complete body parameters on our dedicated <a href='size-chart.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Size Fit Guide</a> page.";
+            } else if (query.includes("return") || query.includes("refund") || query.includes("policy")) {
+                conciergeResponse = "Vogue Avenue provides an explicit 14-day validation window. View details on our <a href='refund-policy.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Refund Policy</a> page.";
+            } else if (query.includes("women") || query.includes("dress")) {
+                conciergeResponse = "Explore premium evening gowns and cocktail wear directly via the <a href='women.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Women's Couture Portfolio</a>.";
+            } else if (query.includes("men") || query.includes("suit") || query.includes("tuxedo")) {
+                conciergeResponse = "Discover premium high-twist wool blazers and bespoke layouts on our <a href='men.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Men's Tailoring Collection</a>.";
+            } else {
+                conciergeResponse = "Vogue Avenue Store is committed to elite-tier craftsmanship. Let me know if I can assist you with tracking an active order or verifying fits.";
+            }
+        } else {
+            conciergeResponse = `
+                I apologize, but as the digital concierge for <strong>Vogue Avenue Store</strong>, I am only programmed to discuss our luxury apparel line and store parameters.<br><br>
+                Please ask a question related to this website or our collections.
+                <span style="display:block; margin: 10px 0 5px 0; color: var(--gold-primary); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase;">Suggested Topics:</span>
+                <ul style="margin: 0; padding-left: 18px; text-align: left; list-style-type: square; line-height: 1.6; color: #CCC;">
+                    <li>Men's Bespoke Suits & Tailoring</li>
+                    <li>Women's Luxury Couture Line</li>
+                    <li>Apparel Sizing & Fit Parameters</li>
+                    <li>Shipping Frameworks & Return Timelines</li>
+                </ul>
+            `;
+        }
+
+        setTimeout(() => appendChatMessage(conciergeResponse, "incoming"), 600);
+    }
+
+    if (chatSend && chatInput) {
+        chatSend.addEventListener("click", processConciergeQuery);
+        chatInput.addEventListener("keydown", (e) => { if (e.key === "Enter") processConciergeQuery(); });
+    }
+
+    // ==========================================
+    // 3. TARGET PAGE GRIDS DETECTION & EXECUTION
+    // ==========================================
     const womenGrid = document.getElementById("women-grid");
     const menGrid = document.getElementById("men-grid");
 
-    // Initialize Women's Grid if current view context matches
+    // Execute only if on women.html target space
     if (womenGrid) {
         const womenProducts = products.filter(p => p.category === "women");
         renderLuxuryGrid(womenProducts, womenGrid);
     }
 
-    // Initialize Men's Grid if current view context matches
+    // Execute only if on men.html target space
     if (menGrid) {
         const menProducts = products.filter(p => p.category === "men");
         renderLuxuryGrid(menProducts, menGrid);
     }
+
+    // Fire baseline cart alignment layout update
+    refreshCartUI();
 });
 
-// Render function displaying title, imagery, price, and variant selector options
+// ==========================================
+// 4. GLOBAL INTERACTIVE RENDER CONTEXTS
+// ==========================================
 function renderLuxuryGrid(itemsList, targetContainer) {
+    if (!targetContainer) return;
     targetContainer.innerHTML = "";
     
     if (itemsList.length === 0) {
@@ -104,7 +247,6 @@ function renderLuxuryGrid(itemsList, targetContainer) {
         const card = document.createElement("div");
         card.className = "product-card";
         
-        // Generate Size Select Options based on array values
         let sizeOptionsHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join("");
 
         card.innerHTML = `
@@ -129,25 +271,85 @@ function renderLuxuryGrid(itemsList, targetContainer) {
     });
 }
 
-// ==========================================
-// 3. INTERACTIVE BAG ADDITION DISPATCHER
-// ==========================================
+// Global Core Adding Handler
 window.processAddToBag = function(productId) {
-    const productElement = products.find(p => p.id === productId);
+    const item = products.find(p => p.id === productId);
+    if (!item) return;
+
     const sizeSelector = document.getElementById(`size-${productId}`);
-    const selectedSize = sizeSelector ? sizeSelector.value : "Standard";
+    const chosenSize = sizeSelector ? sizeSelector.value : "Standard";
 
-    if (!productElement) return;
+    // Track matching specific sizes within bag array
+    const existingItem = cart.find(i => i.id === productId && i.size === chosenSize);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            img: item.img,
+            size: chosenSize,
+            quantity: 1
+        });
+    }
 
-    // Dispatch target data array layout structure to your local cart array
-    // (Assuming your cart implementation uses a push layout mechanism)
-    alert(`Added to Bag:\n${productElement.title}\nSize: ${selectedSize}\nPrice: $${productElement.price.toFixed(2)}`);
+    localStorage.setItem("vogue_cart", JSON.stringify(cart));
+    refreshCartUI();
     
-    // Call your existing calculation functions if present in script workspace:
-    // example: updateCartTotals(productElement, selectedSize);
+    // Automatically fly open drawer right away to show confirmation feedback
+    const cartDrawer = document.getElementById("cart-drawer");
+    if (cartDrawer) cartDrawer.classList.add("active");
 };
 
+window.removeFromCart = function(productId, size) {
+    cart = cart.filter(item => !(item.id === productId && item.size === size));
+    localStorage.setItem("vogue_cart", JSON.stringify(cart));
+    refreshCartUI();
+};
 
+function refreshCartUI() {
+    const cartCount = document.getElementById("cart-count");
+    const cartItemsContainer = document.getElementById("cart-items-container");
+    const cartSubtotal = document.getElementById("cart-subtotal");
+
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+
+    if (!cartItemsContainer) return;
+    cartItemsContainer.innerHTML = "";
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `<p class="empty-message">Your cart is currently empty.</p>`;
+        if (cartSubtotal) cartSubtotal.textContent = "$0.00";
+        return;
+    }
+
+    let subtotal = 0;
+    cart.forEach(item => {
+        subtotal += item.price * item.quantity;
+        const itemRow = document.createElement("div");
+        itemRow.className = "cart-item";
+        itemRow.style = "display: flex; gap: 15px; margin-bottom: 20px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px;";
+        
+        itemRow.innerHTML = `
+            <img src="${item.img}" style="width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--border-color);">
+            <div style="flex-grow: 1; text-align: left;">
+                <h4 style="margin: 0; font-size: 13px; color: #fff;">${item.title}</h4>
+                <p style="margin: 3px 0; font-size: 11px; color: var(--text-muted);">Size: ${item.size} | Qty: ${item.quantity}</p>
+                <p style="margin: 0; font-size: 12px; color: var(--gold-primary); font-weight: 600;">$${(item.price * item.quantity).toFixed(2)}</p>
+            </div>
+            <button onclick="removeFromCart('${item.id}', '${item.size}')" style="background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 16px;">&times;</button>
+        `;
+        cartItemsContainer.appendChild(itemRow);
+    });
+
+    if (cartSubtotal) {
+        cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+    }
+}
 // =================== AI chat Bot=====================
 document.addEventListener("DOMContentLoaded", () => {
     // --- AI Chatbot Elements ---
