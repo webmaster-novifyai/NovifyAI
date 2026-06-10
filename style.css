@@ -849,3 +849,111 @@ body {
 .search-close-btn:hover {
     color: var(--gold-primary);
 }
+
+/* --- Sophisticated Site Footer Layout --- */
+.site-footer {
+    background-color: var(--black-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 60px 4% 20px 4%;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+}
+
+.footer-column h4 {
+    color: #FFFFFF;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.footer-logo {
+    color: var(--gold-primary);
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.footer-description {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: var(--gold-primary);
+    padding-left: 4px;
+}
+
+/* Facebook Specific Highlight Style */
+.social-links a.facebook-link {
+    color: #E0E0E0;
+    font-weight: 500;
+}
+
+.social-links a.facebook-link:hover {
+    color: #4267B2; /* Subtle structural brand nod on absolute hover focus */
+}
+
+.social-icon {
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+/* Legal Footer Ribbon */
+.footer-bottom {
+    max-width: 1200px;
+    margin: 50px auto 0 auto;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Mobile Responsiveness Adjustment */
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .footer-links a:hover {
+        padding-left: 0;
+    }
+}
