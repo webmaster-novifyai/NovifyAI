@@ -493,6 +493,7 @@ a {
     display: flex;
     align-items: center;
     gap: 12px;
+    height: 65px;
 }
 
 .chat-avatar {
@@ -553,6 +554,7 @@ a {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    max-height: calc(100% - 125px);
 }
 
 .message {
@@ -582,6 +584,8 @@ a {
     display: flex;
     gap: 8px;
     background-color: var(--bg-secondary);
+    height: 60px;
+    margin-top: auto;
 }
 
 #chat-input {
@@ -722,13 +726,10 @@ a {
     background-color: rgba(0, 0, 0, 0.85) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
-    
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    
     z-index: 99999 !important;
-    
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
@@ -749,13 +750,11 @@ a {
     width: 90% !important;
     position: relative !important;
     margin: auto !important; 
-    
     display: flex !important;
     flex-direction: row !important;
     gap: 35px !important;
     align-items: center !important;
     justify-content: center !important;
-    
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9) !important;
     transform: scale(0.9) !important;
     transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
@@ -923,22 +922,21 @@ a {
     }
 
     /* ==========================================================================
-       MOBILE CONCIERGE CHAT ENGINE RENDER FIXED REFACTORING
+       MOBILE CONCIERGE CHAT ENGINE FIXES
        ========================================================================== */
     .ai-chat-widget {
         bottom: 20px !important;
         right: 20px !important;
     }
     
-    /* Configures chat window to occupy exactly 80% height, floating firmly above toolbars */
     .chat-window {
         position: fixed !important;
         top: auto !important;
         left: 5% !important;
         right: 5% !important;
-        bottom: 85px !important; /* Positions it safely above mobile browser navigation menus */
+        bottom: 85px !important; 
         width: 90vw !important;
-        height: 80vh !important; /* Locks structural layout scale strictly to 80% viewport footprint */
+        height: 80vh !important; /* Forces strict 80% screen space ceiling */
         border: 1px solid var(--gold-primary) !important;
         border-radius: 12px !important;
         z-index: 999999 !important;
@@ -955,19 +953,17 @@ a {
         height: 65px !important;
     }
 
-    /* Ensures messages stream inside a fluid scroll box contextually sized */
     .chat-messages {
         padding: 15px !important;
         overflow-y: auto !important;
-        max-height: calc(100% - 125px) !important; /* Reserves room for header/footer so input never gets compressed */
+        max-height: calc(100% - 125px) !important; 
     }
 
-    /* Keeps the input area fixed at the bottom of the container, fully visible */
     .chat-input-area {
         padding: 12px !important;
         height: 60px !important;
         background-color: var(--bg-secondary) !important;
-        margin-top: auto !important; /* Pushes input layout firmly down into frame footing */
+        margin-top: auto !important; 
     }
 }
 
