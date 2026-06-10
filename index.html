@@ -68,6 +68,39 @@
             <button class="btn-checkout" onclick="alert('Proceeding to secure checkout gateway...')">Proceed to Checkout</button>
         </div>
     </div>
+
+    <div id="ai-chat-widget" class="ai-chat-widget">
+        <button id="chat-toggle-btn-floating" class="chat-toggle-btn-floating">
+            <i class="fa-solid fa-comments"></i>
+            <span>Atelier Concierge</span>
+        </button>
+
+        <div id="chat-window" class="chat-window hidden">
+            <div class="chat-header">
+                <div class="chat-avatar">
+                    <i class="fa-solid fa-user-tie"></i>
+                </div>
+                <div class="chat-status-info">
+                    <h4>Atelier Concierge</h4>
+                    <p class="status-online"><span class="status-dot"></span> AI Assistant</p>
+                </div>
+                <button id="chat-close-x" class="chat-close-x">&times;</button>
+            </div>
+            
+            <div id="chat-messages" class="chat-messages">
+                <div class="message incoming">
+                    <p>Welcome to ATELIER. I am your digital concierge. How may I assist you with our collections today?</p>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about sizes, styles, shipping..." autocomplete="off">
+                <button id="chat-send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="cart-overlay" class="cart-overlay"></div>
 
     <footer class="main-footer">
