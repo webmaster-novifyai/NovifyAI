@@ -8,9 +8,7 @@
 </head>
 <body>
 
-    <div class="announcement-bar">
-        Worldwide Shipping on All Luxury Orders
-    </div>
+    <div class="announcement-bar">Worldwide Shipping on All Luxury Orders</div>
 
     <header class="main-header">
         <div class="logo"><a href="index.html">Vogue Avenue</a></div>
@@ -21,78 +19,38 @@
             <a href="about.html">About Us</a>
             <a href="size-chart.html">Size Chart</a>
         </nav>
-        <div class="header-actions" style="display: flex; align-items: center; gap: 20px;">
+        <div class="header-actions">
             <button id="search-trigger-btn" class="cart-icon-btn">🔍</button>
-            <button class="cart-icon-btn" id="cart-trigger">
-                🛒 <span id="cart-count">0</span>
-            </button>
+            <button class="cart-icon-btn" id="cart-trigger">🛒 <span id="cart-count">0</span></button>
         </div>
     </header>
 
     <div id="search-overlay" class="search-overlay">
         <button class="search-close-btn" id="search-close-btn">&times;</button>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="SEARCH VOGUE AVENUE..." autocomplete="off">
-        </div>
+        <div class="search-container"><input type="text" id="search-input" placeholder="SEARCH..."></div>
     </div>
 
     <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600') center/cover; padding: 80px 4%; text-align: center;">
         <h1 class="section-title" style="color: white; font-size: 36px; letter-spacing: 5px;">Women's Couture</h1>
-        <p style="color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; margin-top: 10px;">Unrivaled elegance engineered for distinction</p>
     </section>
 
     <main class="container" style="padding: 60px 4%;">
-        <div id="collection-products-grid" class="products-grid" data-category="women">
-            <p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">Loading curated collection lines...</p>
-        </div>
+        <div class="products-grid">
+            </div>
     </main>
 
     <div id="cart-drawer" class="cart-drawer">
-        <div class="cart-drawer-header">
-            <h3>Your Shopping Bag</h3>
-            <button id="cart-close-btn" class="close-btn">&times;</button>
-        </div>
-        <div id="cart-items-container" class="cart-items-container">
-            <p class="empty-message">Your cart is currently empty.</p>
-        </div>
-        <div class="cart-drawer-footer">
-            <div class="cart-total-row">
-                <span>Subtotal:</span>
-                <span id="cart-subtotal">$0.00</span>
-            </div>
-            <button class="btn-checkout">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <div id="product-modal" class="product-modal">
-        <div class="modal-content">
-            <button class="modal-close-btn" id="modal-close-btn">&times;</button>
-            <div class="modal-left" id="modal-product-img-container" style="min-width:280px; max-width:320px; height:400px; background:#111;"></div>
-            <div class="modal-right" style="display:flex; flex-direction:column; justify-content:center; gap:15px; color:#fff;">
-                <h2 id="modal-product-title" style="font-family:var(--font-luxury); font-size:24px; font-weight:400; letter-spacing:1px;"></h2>
-                <div id="modal-product-price" style="color:var(--gold-primary); font-size:18px; font-weight:600;"></div>
-                <div id="modal-size-dropdown-wrapper" class="product-options-wrapper" style="margin-bottom:10px;"></div>
-                <button id="modal-add-to-bag-btn" class="btn-add-cart">Add To Shopping Bag</button>
-            </div>
-        </div>
+        <div class="cart-drawer-header"><h3>Your Shopping Bag</h3><button id="cart-close-btn" class="close-btn">&times;</button></div>
+        <div id="cart-items-container" class="cart-items-container"><p class="empty-message">Your cart is empty.</p></div>
     </div>
 
     <div class="ai-chat-widget">
         <button class="chat-toggle-btn-floating" id="chat-toggle">💬 Vogue Avenue</button>
         <div class="chat-window hidden" id="chat-window">
-            <div class="chat-header">
-                <div class="chat-avatar">VA</div>
-                <div class="chat-status-info">
-                    <h4>Vogue Avenue</h4>
-                    <p><span class="status-dot"></span> AI Assistant</p>
-                </div>
-                <button class="chat-close-x" id="chat-close">&times;</button>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <div class="message incoming">Welcome to Vogue Avenue. How may I assist you with our women's pieces today?</div>
-            </div>
+            <div class="chat-header"><h4>Vogue Avenue</h4><button id="chat-close">&times;</button></div>
+            <div class="chat-messages" id="chat-messages"></div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Ask about styles, sizes..." autocomplete="off">
+                <input type="text" id="chat-input" placeholder="Ask a question...">
                 <button id="chat-send">Send</button>
             </div>
         </div>
@@ -100,30 +58,12 @@
 
     <footer class="site-footer">
         <div class="footer-container">
-            <div class="footer-column brand-column">
-                <div class="footer-logo">Vogue Avenue</div>
-                <p class="footer-description">An elite, high-luxury fashion destination focused on providing architectural tailoring and premium wardrobe lines meticulously crafted with fine heritage fabrics.</p>
-            </div>
-            <div class="footer-column">
-                <h4>Collections</h4>
-                <ul class="footer-links">
-                    <li><a href="women.html">Women's Atelier</a></li>
-                    <li><a href="men.html">Men's Tailoring</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Customer Care</h4>
-                <ul class="footer-links">
-                    <li><a href="size-chart.html">Size Guide Link</a></li>
-                    <li><a href="#">Insured Shipping Policy</a></li>
-                </ul>
-            </div>
+            <div class="footer-column"><h3>Vogue Avenue</h3><p>Elite high-luxury fashion brand storefront.</p></div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Vogue Avenue Store. All Rights Reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2026 Vogue Avenue Store. All Rights Reserved.</p></div>
     </footer>
 
     <script src="app.js"></script>
+    <script src="women.js"></script>
 </body>
 </html>
