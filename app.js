@@ -274,15 +274,81 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Concierge Chat Event Listeners Bindings
-    const chatToggle = document.getElementById("chat-toggle");
-    const chatCloseX = document.getElementById("chat-close");
-    const chatWindow = document.getElementById("chat-window");
+    // Ensure these variable IDs perfectly match your HTML elements
+const chatToggle = document.getElementById('chat-toggle');
+const chatWindow = document.getElementById('chat-window');
+const chatClose = document.getElementById('chat-close');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const chatMessages = document.getElementById('chat-messages');
 
-    if (chatToggle && chatWindow) {
-        chatToggle.addEventListener("click", () => chatWindow.classList.toggle("hidden"));
+// --- VOGUE AVENUE CONCIERGE CHAT ENGINE ---
+if (chatToggle && chatWindow) {
+    // Open/Close toggle button handler
+    chatToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chatWindow.classList.toggle('hidden');
+    });
+
+    // Close "X" button handler
+    if (chatClose) {
+        chatClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chatWindow.classList.add('hidden');
+        });
     }
-    if (chatCloseX && chatWindow) {
-        chatCloseX.addEventListener("click", () => chatWindow.classList.add("hidden"));
-    }
-});
+
+    // Prevent clicks inside the chat window from closing it out
+    chatWindow.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Close chat if user clicks anywhere else on the document screen
+    document.addEventListener('click', () => {
+        chatWindow.classList.add('hidden');
+    });
+}
+
+// --- MESSAGE SENDING HANDLERS ---
+function handleUserMessage() {
+    if (!chatInput || !chatMessages) return;
+    
+    const messageText = chatInput.value.trim();
+    if (messageText === '') return;
+
+    // 1. Append User Outgoing Message Bubble
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.className = 'message outgoing';
+    userMessageDiv.textContent = messageText;
+    chatMessages.appendChild(userMessageDiv);
+
+    // Clear input field right away
+    chatInput.value = '';
+
+    // Auto-scroll context container smoothly to bottom footer
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // 2. Trigger Elegant Mock Luxury Concierge System Reply
+    setTimeout(() => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message incoming';
+        botMessageDiv.textContent = "Thank you for contacting our concierge service. Our style advisors are processing your request regarding our Premium Line.";
+        chatMessages.appendChild(botMessageDiv);
+        
+        // Final scroll adjust
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1000);
+}
+
+// Bind Action to both Click and Enter key triggers
+if (chatSend) {
+    chatSend.addEventListener('click', handleUserMessage);
+}
+
+if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleUserMessage();
+        }
+    });
+}
