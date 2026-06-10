@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         chatToggle.addEventListener("click", () => {
             chatWindow.classList.remove("hidden");
             chatWindow.classList.add("active");
-            chatToggle.style.transform = "scale(0)"; // Smoothly hide toggle button
+            chatToggle.style.transform = "scale(0)"; 
             setTimeout(() => { chatToggle.style.display = "none"; }, 200);
         });
     }
@@ -103,39 +103,80 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Handle Sending Messages (Simulated Concierge Response)
-    function handleSendMessage() {
-        const messageText = chatInput.value.trim();
-        if (!messageText) return;
-
-        // Append User Message
-        const userMsg = document.createElement("div");
-        userMsg.className = "message outgoing";
-        userMsg.textContent = messageText;
-        chatMessages.appendChild(userMsg);
-        
-        chatInput.value = "";
+    // Helper to print message structures safely supporting HTML nodes
+    function appendChatMessage(htmlContent, direction) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${direction}`;
+        msgDiv.innerHTML = htmlContent; // Allows luxury hyperlinks and structural lists
+        chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Simulated Luxury Concierge Response Delay
-        setTimeout(() => {
-            const botMsg = document.createElement("div");
-            botMsg.className = "message incoming";
-            botMsg.textContent = "Thank you for contacting Vogue Avenue. An executive concierge associate is reviewing your inquiry regarding our bespoke collections.";
-            chatMessages.appendChild(botMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }, 1000);
     }
 
+    // Smart Evaluation Engine
+    function processConciergeQuery() {
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+
+        // Display User Message
+        appendChatMessage(userText, "outgoing");
+        chatInput.value = "";
+
+        const query = userText.toLowerCase();
+        let conciergeResponse = "";
+
+        // Defensive Brand Keyword Matrix
+        const coreKeywords = [
+            "suit", "dress", "tuxedo", "size", "chart", "fit", "measure", 
+            "return", "refund", "policy", "shipping", "delivery", "men", 
+            "women", "couture", "tailoring", "price", "cost", "buy", 
+            "order", "fabric", "vogue", "collection", "clothe", "apparel"
+        ];
+
+        // Evaluate if query matches any store context keyword
+        const isQueryValid = coreKeywords.some(keyword => query.includes(keyword));
+
+        if (isQueryValid) {
+            // Contextual responses for valid matching paths
+            if (query.includes("size") || query.includes("fit") || query.includes("measure")) {
+                conciergeResponse = "You can review our complete body parameters on our dedicated <a href='size-chart.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Size Fit Guide</a> page to find your ideal Italian-cut or couture fit.";
+            } else if (query.includes("return") || query.includes("refund") || query.includes("policy")) {
+                conciergeResponse = "Vogue Avenue provides an explicit 14-day validation window for exchanges or refunds. Please view our structural compliance mandates on our <a href='refund-policy.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Refund & Returns Policy</a> page.";
+            } else if (query.includes("women") || query.includes("dress")) {
+                conciergeResponse = "Our current seasonal catalog features elite evening gowns, traditional embroidered luxury wear, and bridal variants. Browse the full collection directly via the <a href='women.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Women's Couture Portfolio</a>.";
+            } else if (query.includes("men") || query.includes("suit") || query.includes("tuxedo")) {
+                conciergeResponse = "Discover premium high-twist wool blazers, modern slim tuxedo layouts, and bespoke traditional wear on our <a href='men.html' style='color: var(--gold-primary); text-decoration: underline; font-weight:600;'>Men's Tailoring Collection</a> page.";
+            } else {
+                conciergeResponse = "Vogue Avenue Store is committed to providing elite-tier craftsmanship. Let me know if you would like me to assist you with tracking an active order, verifying fabric weights, or navigating our luxury collections.";
+            }
+        } else {
+            // Guardrail fallback execution for unrelated topics
+            conciergeResponse = `
+                I apologize, but as the digital concierge for <strong>Vogue Avenue Store</strong>, I am only programmed to discuss our luxury apparel line, order processing, and store documentation parameters.<br><br>
+                Please ask me a question related to this website or our collections. 
+                <span style="display:block; margin: 10px 0 5px 0; color: var(--gold-primary); font-weight:600; font-size:11px; letter-spacing:1px; text-transform:uppercase;">Suggested Topics:</span>
+                <ul style="margin: 0; padding-left: 18px; text-align: left; list-style-type: square; line-height: 1.6; color: #CCC;">
+                    <li>Men's Bespoke Suits & Tailoring</li>
+                    <li>Women's Luxury Couture & Evening Wear</li>
+                    <li>Apparel Sizing & Fit Parameters</li>
+                    <li>Shipping Frameworks & Return Timelines</li>
+                </ul>
+            `;
+        }
+
+        // Simulate high-end digital assistance processing lag
+        setTimeout(() => {
+            appendChatMessage(conciergeResponse, "incoming");
+        }, 750);
+    }
+
+    // Trigger Bindings
     if (chatSend && chatInput) {
-        chatSend.addEventListener("click", handleSendMessage);
+        chatSend.addEventListener("click", processConciergeQuery);
         chatInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") handleSendMessage();
+            if (e.key === "Enter") processConciergeQuery();
         });
     }
 });
-
-
 
 
 // =================Search================================
