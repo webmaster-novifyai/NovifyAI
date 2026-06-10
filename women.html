@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Women's Luxury Couture | Vogue Avenue</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -14,9 +13,7 @@
     </div>
 
     <header class="main-header">
-        <div class="logo">
-            <a href="index.html">Vogue Avenue</a>
-        </div>
+        <div class="logo"><a href="index.html">Vogue Avenue</a></div>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="women.html" class="active">Women</a>
@@ -25,54 +22,26 @@
             <a href="size-chart.html">Size Chart</a>
         </nav>
         <div class="header-actions" style="display: flex; align-items: center; gap: 20px;">
-            <button id="search-trigger-btn" class="cart-icon-btn" aria-label="Search Site">🔍</button>
+            <button id="search-trigger-btn" class="cart-icon-btn">🔍</button>
             <button class="cart-icon-btn" id="cart-trigger">
                 🛒 <span id="cart-count">0</span>
             </button>
         </div>
     </header>
 
-    <div id="search-overlay" class="search-overlay">
-        <button class="search-close-btn" id="search-close">&times;</button>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="SEARCH VOGUE AVENUE..." autocomplete="off">
-            <div id="search-results-grid" class="products-grid" style="margin-top: 40px;"></div>
-        </div>
-    </div>
-
-    <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=1600') center/cover; padding: 100px 4%; text-align: center; border-bottom: 1px solid var(--border-color);">
-        <h1 class="section-title" style="margin: 0; color: #FFF;">Women's Couture</h1>
-        <p style="color: var(--text-muted); letter-spacing: 2px; margin-top: 10px; text-transform: uppercase; font-size: 12px;">Evening Gowns, Tailored Trenches & Luxury Silk</p>
+    <section class="category-hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600') center/cover; padding: 80px 4%; text-align: center;">
+        <h1 class="section-title" style="color: white; font-size: 36px; letter-spacing: 5px;">Women's Couture</h1>
+        <p style="color: var(--gold-primary); text-transform: uppercase; letter-spacing: 2px; font-size: 11px; margin-top: 10px;">Unrivaled elegance engineered for distinction</p>
     </section>
 
     <main class="container" style="padding: 60px 4%;">
-        <section class="category-section">
-            <div class="products-grid" id="women-grid"></div>
-        </section>
+        <div id="collection-products-grid" class="products-grid" data-category="women">
+            <p style="color: var(--text-muted); text-align: center; grid-column: 1/-1;">Loading curated collection lines...</p>
+        </div>
     </main>
 
-    <div id="cart-drawer" class="cart-drawer">
-        <div class="cart-drawer-header">
-            <h3>Your Shopping Bag</h3>
-            <button id="cart-close-btn" class="close-btn">&times;</button>
-        </div>
-        <div id="cart-items-container" class="cart-items-container">
-            <p class="empty-message">Your cart is currently empty.</p>
-        </div>
-        <div class="cart-drawer-footer">
-            <div class="cart-total-row">
-                <span>Subtotal:</span>
-                <span id="cart-subtotal">$0.00</span>
-            </div>
-            <button class="btn-checkout" onclick="alert('Proceeding to secure checkout gateway...')">Proceed to Checkout</button>
-        </div>
-    </div>
-
     <div class="ai-chat-widget">
-        <button class="chat-toggle-btn-floating" id="chat-toggle">
-            <span>💬</span> Vogue Avenue
-        </button>
-
+        <button class="chat-toggle-btn-floating" id="chat-toggle">💬 Vogue Avenue</button>
         <div class="chat-window hidden" id="chat-window">
             <div class="chat-header">
                 <div class="chat-avatar">VA</div>
@@ -83,9 +52,7 @@
                 <button class="chat-close-x" id="chat-close">&times;</button>
             </div>
             <div class="chat-messages" id="chat-messages">
-                <div class="message incoming">
-                    Welcome to Vogue Avenue. I am your digital concierge. How may I assist you with our collections today?
-                </div>
+                <div class="message incoming">Welcome to Vogue Avenue. How may I assist you with our women's pieces today?</div>
             </div>
             <div class="chat-input-area">
                 <input type="text" id="chat-input" placeholder="Ask about styles, sizes..." autocomplete="off">
@@ -94,63 +61,16 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-column brand-column">
-                <h3 class="footer-logo">Vogue Avenue</h3>
-                <p class="footer-description">
-                    Curating a sanctuary of premium luxury attire. Bridging traditional heritage craftsmanship with modern, high-fashion sensibilities for the contemporary connoisseur.
-                </p>
-            </div>
-            <div class="footer-column">
-                <h4>Collections</h4>
-                <ul class="footer-links">
-                    <li><a href="women.html">Women's Couture</a></li>
-                    <li><a href="men.html">Men's Tailoring</a></li>
-                    <li><a href="index.html">New Arrivals</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Assistance</h4>
-                <ul class="footer-links">
-                    <li><a href="size-chart.html">Size Fit Guide</a></li>
-                    <li><a href="refund-policy.html">Refund & Returns Policy</a></li>
-                    <li><a href="about.html">Our Design Story</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Follow The Label</h4>
-                <ul class="footer-links social-links">
-                    <li>
-                        <a href="https://www.facebook.com/vogueavenuestore/" target="_blank" rel="noopener noreferrer" class="facebook-link">
-                            <span class="social-icon">📘</span> Facebook Official
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Vogue Avenue Store. All Rights Reserved. Crafted for premium digital exhibition.</p>
-        </div>
-    </footer>
-
-    <div id="product-modal" class="product-modal">
-        <div class="modal-content">
-            <button class="modal-close-btn" id="modal-close-btn" aria-label="Close overlay">&times;</button>
-            <div class="modal-left" id="modal-product-img-container"></div>
-            <div class="modal-right">
-                <h2 id="modal-product-title"></h2>
-                <p id="modal-product-price"></p>
-                <div class="modal-options-row">
-                    <label for="modal-size-selector">Select Size Layout:</label>
-                    <select id="modal-size-selector" class="luxury-size-selector"></select>
-                </div>
-                <button id="modal-add-to-bag-btn" class="btn-add-cart">Add To Shopping Bag</button>
-            </div>
-        </div>
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-drawer-header"><h3>Your Shopping Bag</h3><button id="cart-close-btn" class="close-btn">&times;</button></div>
+        <div id="cart-items-container" class="cart-items-container"><p class="empty-message">Your cart is currently empty.</p></div>
+        <div class="cart-drawer-footer"><div class="cart-total-row"><span>Subtotal:</span><span id="cart-subtotal">$0.00</span></div><button class="btn-checkout">Proceed to Checkout</button></div>
     </div>
 
+    <footer class="site-footer">
+        <div class="footer-bottom"><p>&copy; 2026 Vogue Avenue Store. All Rights Reserved.</p></div>
+    </footer>
+
     <script src="app.js"></script>
-    <script src="women.js"></script>
 </body>
 </html>
